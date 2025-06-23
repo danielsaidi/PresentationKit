@@ -2,18 +2,9 @@
 
 This article describes how to get started with PresentationKit.
 
-To use PresentationKit, just apply any of the available `.presentation(for: ...)` view modifiers to your application root, then use the environment injected ``AlertContext``, ``FullScreenCoverContext``, and ``SheetContext`` to present alerts and modals.
+PresentationKit makes it easy to present alerts, full screen covers, and sheets, using the observable ``AlertContext``, ``FullScreenCoverContext``, and ``SheetContext`` types together with any kind of model that we want to present.
 
-For instance, consider that we have the following, super-simple type, which in a real world app could be a complex model, an error type, a screen-defining enum, or any type that you want to present:
-
-```swift
-struct Model: Identifiable {
-
-    let id: Int
-}
-```
-
-All we have to do to be able to present this type in an alert, full screen cover, or sheet is to define a presentation strategy for it like this:
+All we have to do to be able to present a model in an alert or a modal, from anywhere in our app, is to apply a ``SwiftUICore/View/presentation(for:alertContent:coverContent:sheetContent:)`` view modifier to the application root:
 
 ```swift
 @main
@@ -23,7 +14,7 @@ struct MyApp: App {
         WindowGroup {
             ContentView()
                 .presentation(
-                    for: Model.self,
+                    for: MyModel.self,
                     alertContent: { value in
                         AlertContent(
                             title: "Alert",
@@ -35,10 +26,10 @@ struct MyApp: App {
                         )
                     },
                     coverContent: { 
-                        ModalView(value: $0, title: "Cover") 
+                        MyModelView(value: $0, title: "Cover") 
                     },
                     sheetContent: { 
-                        ModalView(value: $0, title: "Sheet")
+                        MyModelView(value: $0, title: "Sheet")
                     }
                 )
         }
@@ -46,9 +37,9 @@ struct MyApp: App {
 }
 ```
 
-You can omit any builder that you're not going to use. To only alert errors, you only have to provide an alert content builder, and to only present modals, you only have to provide a modal content builder.
+You can omit any builder that you're not going to use. For instance, you don't have to provide an alert content builder if you don't intend to present your model in an alert.
 
-The ContentView, and all views in its view hierarchy, can now present Model values with the various context ``PresentationContext/present(_:)`` functions:
+This will inject presentation contexts into the environment. We can use these contexts to present our model from anywhere in our app:
 
 ```swift
 struct ContentView: View {
@@ -78,49 +69,7 @@ struct ContentView: View {
 }
 ```
 
-PresentationKit will apply the same presentation strategy to all modals, using new context values, which means that this will also work:
-
-```swift
-struct ModalView: View {
-
-    let value: Model
-    let title: String
-
-    @Environment(\.dismiss) private var dismiss
-
-    @Environment(AlertContext<Model>.self) private var alert
-    @Environment(FullScreenCoverContext<Model>.self) private var cover
-    @Environment(SheetContext<Model>.self) private var sheet
-
-    private let value = Model(id: 2)
-
-    var body: some View {
-        NavigationStack {
-            List {
-                Button("Present another alert") {
-                    alert.present(value)
-                }
-                Button("Present another full screen cover") {
-                    cover.present(value)
-                }
-                Button("Present another sheet") {
-                    sheet.present(value)
-                }
-            }
-            .navigationTitle(title)
-            .toolbar {
-                ToolbarItem(placement: .primaryAction) {
-                    Button("Dismiss", role: .cancel) {
-                        dismiss()
-                    }
-                }
-            }
-        }
-    }
-}
-```
-
-In other words, you only have to specify your presentation strategy *once*, after which the same presentations will work in the entire app.
+PresentationKit will create and inject new contexts when we present modals. This means that we only have to specify our presentation strategy *once*, after which the same presentations will work in the entire app.
 
 
 

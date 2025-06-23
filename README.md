@@ -47,18 +47,9 @@ You can [become a sponsor][Sponsors] to help me dedicate more time on my various
 
 ## Getting Started
 
-With PresentationKit, just add a `.presentation(for: ...)` modifier to your application root, then use any of the environment injected ``AlertContext``, ``FullScreenCoverContext``, and ``SheetContext`` to present alerts & modals.
+PresentationKit makes it easy to present alerts, full screen covers, and sheets, using observable contexts together with any kind of model that we want to present.
 
-For instance, consider that we have the following, super-simple type, which in a real world app could be a complex model, an error type, a screen-defining enum, or any type that you want to present:
-
-```swift
-struct Model: Identifiable {
-
-    let id: Int
-}
-```
-
-All we have to do to be able to present this type in an alert or a modal is to define a presentation strategy like this:
+All we have to do to be able to present a model in an alert or a modal, from anywhere within our app, is to apply a ``presentation(...)`` view modifier to the application root:
 
 ```swift
 @main
@@ -68,7 +59,7 @@ struct MyApp: App {
         WindowGroup {
             ContentView()
                 .presentation(
-                    for: Model.self,
+                    for: MyModel.self,
                     alertContent: { value in
                         AlertContent(
                             title: "Alert",
@@ -80,10 +71,10 @@ struct MyApp: App {
                         )
                     },
                     coverContent: { 
-                        ModalView(value: $0, title: "Cover") 
+                        MyModelView(value: $0, title: "Cover") 
                     },
                     sheetContent: { 
-                        ModalView(value: $0, title: "Sheet")
+                        MyModelView(value: $0, title: "Sheet")
                     }
                 )
         }
@@ -91,9 +82,9 @@ struct MyApp: App {
 }
 ```
 
-You can omit any builder that you're not going to use. To only alert errors, you only have to provide an alert content builder. To only present modals, you only have to provide a modal content builder.
+You can omit any builder that you're not going to use. For instance, you don't have to define an alert content if you don't intend to present your model in an alert.
 
-The ContentView, and all views in its modal hierarchy, can now present model values using the various contexts:
+This will inject presentation contexts into the environment, that we can use to present our model from anywhere:
 
 ```swift
 struct ContentView: View {
@@ -123,49 +114,9 @@ struct ContentView: View {
 }
 ```
 
-PresentationKit will automatically apply the same presentation strategy to all its modals, using new context values. This means that this will automatically work:
+PresentationKit will create and inject new contexts when we present modals. This means that we only have to add our presentation strategy *once*, after which the presentation will apply to the entire app.
 
-```swift
-struct ModalView: View {
-
-    let value: Model
-    let title: String
-
-    @Environment(\.dismiss) private var dismiss
-
-    @Environment(AlertContext<Model>.self) private var alert
-    @Environment(FullScreenCoverContext<Model>.self) private var cover
-    @Environment(SheetContext<Model>.self) private var sheet
-
-    private let value = Model(id: 2)
-
-    var body: some View {
-        NavigationStack {
-            List {
-                Button("Present another alert") {
-                    alert.present(value)
-                }
-                Button("Present another full screen cover") {
-                    cover.present(value)
-                }
-                Button("Present another sheet") {
-                    sheet.present(value)
-                }
-            }
-            .navigationTitle(title)
-            .toolbar {
-                ToolbarItem(placement: .primaryAction) {
-                    Button("Dismiss", role: .cancel) {
-                        dismiss()
-                    }
-                }
-            }
-        }
-    }
-}
-```
-
-In other words, you only have to specify your presentation strategy *once*, after which the same presentation logic will work in the entire app.
+PresentationKit also has an ``ErrorAlerter`` protocol that makes it easy to automatically present error alerts, and a ``NavigationContext`` that can be used to observe a navigation path. 
 
 For more information, see the [getting-started guide][Getting-Started].
 
