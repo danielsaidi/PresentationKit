@@ -9,9 +9,20 @@
 import PresentationKit
 import SwiftUI
 
-struct DemoModel: Identifiable {
+struct DemoModel: Equatable, Identifiable {
 
     let id: Int
+}
+
+extension DemoModel {
+
+    var prefersInlineSheetPresentation: Bool {
+        self == .prefersInlineSheetPresentation
+    }
+
+    static var prefersInlineSheetPresentation: Self {
+        self.init(id: 1_000)
+    }
 }
 
 extension FocusedValues {

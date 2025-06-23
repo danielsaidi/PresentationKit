@@ -16,38 +16,27 @@ struct DemoModal: View {
 
     @Environment(\.dismiss) private var dismiss
 
-    @Environment(AlertContext<DemoModel>.self) private var alert
-    @Environment(FullScreenCoverContext<DemoModel>.self) private var cover
-    @Environment(SheetContext<DemoModel>.self) private var sheet
-
     var body: some View {
         NavigationStack {
-            List {
-                Button("Present another alert") {
-                    alert.present(value)
-                }
-                #if !os(macOS)
-                Button("Present another full screen cover") {
-                    cover.present(value)
-                }
-                #endif
-                Button("Present another sheet") {
-                    sheet.present(value)
-                }
-            }
-            .frame(minHeight: 250)
-            .focusable()
-            .focusedValue(\.demoModelAlertContext, alert)
-            .focusedValue(\.demoModelCoverContext, cover)
-            .focusedValue(\.demoModelSheetContext, sheet)
-            .navigationTitle(title)
-            .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Dismiss", role: .cancel) {
-                        dismiss()
+            DemoActions()
+                .frame(minHeight: 250)
+                .navigationTitle(title)
+                .toolbar {
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button("Dismiss", role: .cancel) {
+                            dismiss()
+                        }
                     }
                 }
-            }
         }
+    }
+}
+
+#Preview {
+    DemoPreview {
+        DemoModal(
+            value: .init(id: 1),
+            title: "Modal"
+        )
     }
 }
