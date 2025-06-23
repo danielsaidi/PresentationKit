@@ -10,17 +10,26 @@ import SwiftUI
 
 public extension View {
 
-    /// Register a presentation strategy for a certain model.
-    func presentation<Model: Identifiable, AlertActions: View, AlertMessage: View>(
+    /// Register a presentation strategy for a certain error
+    /// type, without any modal view capabilities.
+    func presentation<Model: Error, AlertActions: View, AlertMessage: View>(
         for model: Model.Type,
         alertContent: @escaping (Model) -> AlertContent<AlertActions, AlertMessage>
     ) -> some View {
         self.modifier(
-            PresentationModifier(
-                alertContent: alertContent,
-                coverContent: { _ in EmptyView() },
-                sheetContent: { _ in EmptyView() }
+            AlertPresentationModifier(
+                alertContent: alertContent
             )
+        )
+    }
+
+    /// Register a presentation strategy for a certain error
+    /// alert convertible type, with no modal capabilities.
+    func presentation<Model: ErrorAlertConvertible>(
+        for model: Model.Type
+    ) -> some View {
+        self.modifier(
+            ErrorAlertConvertiblePresentationModifier<Model>()
         )
     }
 
@@ -84,6 +93,72 @@ public extension View {
                 sheetContent: sheetContent
             )
         )
+    }
+}
+
+struct AlertPresentationModifier<Model, AlertActions: View, AlertMessage: View>: ViewModifier {
+
+    init(
+        alertContent: @escaping (Model) -> AlertContent<AlertActions, AlertMessage>
+    ) {
+        self.alertContent = alertContent
+    }
+
+    let alertContent: (Model) -> AlertContent<AlertActions, AlertMessage>
+
+    @State var alertContext = AlertContext<Model>()
+
+    public func body(content: Content) -> some View {
+        content
+            .environment(alertContext)
+            .alert(
+                alertTitle,
+                isPresented: .init(
+                    get: { alertContext.value != nil },
+                    set: {
+                        if $0 {
+                        } else {
+                            alertContext.value = nil
+                        }
+                    }
+                ),
+                presenting: alertContext.value,
+                actions: { alertContent($0).actions() },
+                message: { alertContent($0).message() }
+            )
+    }
+}
+
+private extension AlertPresentationModifier {
+
+    var alertTitle: LocalizedStringKey {
+        guard let val = alertContext.value else { return "" }
+        return alertContent(val).title
+    }
+}
+
+struct ErrorAlertConvertiblePresentationModifier<Model: ErrorAlertConvertible>: ViewModifier {
+
+    @State var alertContext = AlertContext<Model>()
+
+    public func body(content: Content) -> some View {
+        content
+            .environment(alertContext)
+            .alert(
+                alertContext.value?.alertTitle ?? "",
+                isPresented: .init(
+                    get: { alertContext.value != nil },
+                    set: {
+                        if $0 {
+                        } else {
+                            alertContext.value = nil
+                        }
+                    }
+                ),
+                presenting: alertContext.value,
+                actions: { value in Button(value.alertButtonText, action: {}) },
+                message: { value in Text(value.alertMessage) }
+            )
     }
 }
 

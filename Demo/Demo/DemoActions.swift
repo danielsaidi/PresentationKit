@@ -11,11 +11,16 @@ import SwiftUI
 
 /// This list contains demo-related actions that are used in
 /// both the root view and in modals.
-struct DemoActions: View {
+struct DemoActions: View, ErrorAlerter {
 
     @Environment(AlertContext<DemoModel>.self) var alert
+    @Environment(AlertContext<DemoError>.self) var alertContext
     @Environment(FullScreenCoverContext<DemoModel>.self) var cover
     @Environment(SheetContext<DemoModel>.self) var sheet
+
+    var errorAlertContext: PresentationKit.AlertContext<DemoError> {
+        alertContext
+    }
 
     private let value = DemoModel(id: 1)
 
@@ -46,6 +51,13 @@ struct DemoActions: View {
                         label("Present an inline sheet", "inset.filled.bottomhalf.rectangle.portrait")
                     }
                 }
+                Section("Errors") {
+                    Button {
+                        tryWithErrorAlert(performFailingOperation)
+                    } label: {
+                        label("Alert a failing operation", "exclamationmark.triangle")
+                    }
+                }
             }
             .focusable()
             .focusedValue(\.demoModelAlertContext, alert)
@@ -62,6 +74,10 @@ private extension View {
             title,
             systemImage: systemImageName
         )
+    }
+
+    func performFailingOperation() async throws {
+        throw DemoError.demoError
     }
 }
 

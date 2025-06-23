@@ -24,8 +24,10 @@ import SwiftUI
 /// the alert will present.
 public protocol ErrorAlerter {
 
+    associatedtype ErrorType: Error
+
     /// The alert context to use to present errors.
-    var errorAlertContext: AlertContext<Error> { get }
+    var errorAlertContext: AlertContext<ErrorType> { get }
 }
 
 @MainActor
@@ -37,7 +39,7 @@ public extension ErrorAlerter {
     /// show its ``ErrorAlertConvertible/errorAlert`` in the
     /// alert context's view builder.
     func alert(
-        error: Error,
+        error: ErrorType,
         okButtonText: String = "OK"
     ) {
         errorAlertContext.present(error)
@@ -50,14 +52,16 @@ public extension ErrorAlerter {
             do {
                 try await operation()
             } catch {
-                alert(error: error)
+                if let error = error as? ErrorType {
+                    alert(error: error)
+                }
             }
         }
     }
 
     /// Try to perform a throwing async operation, and alert
     /// any errors that are thrown.
-    func tryWithErrorAlert<ErrorType: Error>(
+    func tryWithErrorAlert(
         _ operation: @escaping BlockOperation<ErrorType>,
         completion: @escaping BlockCompletion<ErrorType>
     ) {

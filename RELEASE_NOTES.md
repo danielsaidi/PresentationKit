@@ -5,6 +5,17 @@ PresentationKit will use semver after 1.0.
 Until then, breaking changes can happen in any version, and deprecations may be removed in any minor version bump.
 
 
+## 0.3.1
+
+This version adds new error utilities.
+
+### ✨ New Features
+
+* `.presentation(...)` can now be used with non-identifiable errors.
+* `.presentation(...)` can now be used with `ErrorAlertConvertible` types.
+
+
+
 ## 0.3
 
 This version adds new error utilities.
