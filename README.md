@@ -47,9 +47,9 @@ You can [become a sponsor][Sponsors] to help me dedicate more time on my various
 
 ## Getting Started
 
-PresentationKit makes it easy to present alerts, full screen covers, and sheets, using observable contexts together with any kind of model that we want to present.
+PresentationKit makes it easy to present alerts, full screen covers, and sheets, using observable contexts with any kind of models that we want to present.
 
-All we have to do to be able to present a model in an alert or a modal, from anywhere within our app, is to apply a ``presentation(...)`` view modifier to the application root:
+All we have to do to be able to present a model from anywhere within our app, is to apply a ``presentation(...)`` view modifier to the application root:
 
 ```swift
 @main
@@ -114,11 +114,11 @@ struct ContentView: View {
 }
 ```
 
-PresentationKit will create and inject new contexts when we present modals. This means that we only have to add our presentation strategy *once*, after which the presentation will apply to the entire app.
+PresentationKit will create and inject new contexts as we present modals. This means that we only have to add our presentation strategy *once*, except whein applying multiple presentations. See [getting-started][Getting-Started] for more info.
 
 PresentationKit also has an ``ErrorAlerter`` protocol that makes it easy to automatically present error alerts, and a ``NavigationContext`` that can be used to observe a navigation path. 
 
-For more information, see the [getting-started guide][Getting-Started].
+For more information regarding more complex presentation strategies and functionality not covered by this guide, please see the [getting-started guide][Getting-Started].
 
 
 
@@ -162,5 +162,5 @@ PresentationKit is available under the MIT license. See the [LICENSE][License] f
 [Twitter]: https://twitter.com/danielsaidi
 
 [Documentation]: https://danielsaidi.github.io/PresentationKit
-[Getting-Started]: https://danielsaidi.github.io/PresentationKit/documentation/PresentationKit/getting-started
+[Getting-Started]: https://danielsaidi.github.io/PresentationKit/documentation/presentationkit/getting-started
 [License]: https://github.com/danielsaidi/presentationkit/blob/master/LICENSE

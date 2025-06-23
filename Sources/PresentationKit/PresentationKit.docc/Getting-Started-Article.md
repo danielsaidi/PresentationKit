@@ -4,7 +4,7 @@ This article describes how to get started with PresentationKit.
 
 PresentationKit makes it easy to present alerts, full screen covers, and sheets, using the observable ``AlertContext``, ``FullScreenCoverContext``, and ``SheetContext`` types together with any kind of model that we want to present.
 
-All we have to do to be able to present a model in an alert or a modal, from anywhere in our app, is to apply a ``SwiftUICore/View/presentation(for:alertContent:coverContent:sheetContent:)`` view modifier to the application root:
+All we have to do to be able to present a model in an alert or a modal, from anywhere in our app, is to apply a ``SwiftUICore/View/presentation(for:alertContent:fullScreenCoverContent:sheetContent:)`` view modifier to the application root:
 
 ```swift
 @main
@@ -37,9 +37,9 @@ struct MyApp: App {
 }
 ```
 
-You can omit any builder that you're not going to use. For instance, you don't have to provide an alert content builder if you don't intend to present your model in an alert.
+This will ensure that the registered model is presented in the way we specify. You can omit any builder that you're not going to use. For instance, you don't have to provide an alert content builder if you don't intend to present your model in an alert.
 
-This will inject presentation contexts into the environment. We can use these contexts to present our model from anywhere in our app:
+The presentation will inject observable presentation contexts into the environment. We can use these contexts to present model values from anywhere within our app:
 
 ```swift
 struct ContentView: View {
@@ -75,7 +75,17 @@ PresentationKit will create and inject new contexts when we present modals. This
 
 ## Going Further
 
-### Supporting Multi-Window Apps
+### Multiple Presentation Modifiers
+
+PresentationKit supports registering different presentation strategies for different models, which means that we can chain presentation strategies together to support multiple model and error types. 
+
+However, since each presentation modifier will only create and inject new contexts for its specific model, we must apply the same multi-presentation strategy for every new modal that we create, otherwise new modals will lack injected environment values.
+
+See the demo app for examples on how you can apply the same presentation modifier to both the app root view and its modal screens. 
+
+
+
+### Multi-Window Apps & Focus Values
 
 Multi-windowed apps must be able to keep track of the contexts that belong to the current window, so that the correct contexts can be used to present alerts and modals from global places, like commands and the menu bar.
 
@@ -123,7 +133,7 @@ You can then use `@FocusedValue` to access the currently focused values from a c
 By using typed focus values, you can inject as many contexts as you like and use each value to access the correct context.
 
 
-### Automated Error Alerts
+### Automatic Error Alerting for Failing Operations
 
 PresentationKit has an ``ErrorAlerter`` protocol that makes it easy to automatically present error alerts, for instance when a SwiftUI triggers an asynchronous operation that fails.
 
