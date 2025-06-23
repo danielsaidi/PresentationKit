@@ -72,6 +72,11 @@ PresentationKit is available under the MIT license.
 - ``FullScreenCoverContext``
 - ``SheetContext``
 
+### Errors
+
+- ``ErrorAlerter``
+- ``ErrorAlertConvertible``
+
 ### Navigation
 
 - ``NavigationButton``

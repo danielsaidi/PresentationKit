@@ -126,7 +126,7 @@ In other words, you only have to specify your presentation strategy *once*, afte
 
 ## Going Further
 
-### Using presentation contexts in multi-window apps
+### Supporting Multi-Window Apps
 
 Multi-windowed apps must be able to keep track of the contexts that belong to the current window, so that the correct contexts can be used to present alerts and modals from global places, like commands and the menu bar.
 
@@ -174,8 +174,13 @@ You can then use `@FocusedValue` to access the currently focused values from a c
 By using typed focus values, you can inject as many contexts as you like and use each value to access the correct context.
 
 
-### Navigation
+### Automated Error Alerts
 
-PresentationKit has navigation-related types that makes it easier to manage navigation in navigation stack.
+PresentationKit has an ``ErrorAlerter`` protocol that makes it easy to automatically present error alerts, for instance when a SwiftUI triggers an asynchronous operation that fails.
 
-The ``NavigationContext`` can be used to observe a navigation path, while ``NavigationButton`` can be used to trigger a navigation with a button instead of a NavigationLink.
+To use the ``ErrorAlerter`` protocol, just let your view or model implement it, then use any ``ErrorAlerter/tryWithErrorAlert(_:)`` function to trigger an asynchronous operation that will automatically alert any errors that are thrown.
+
+
+### Navigation Utilities
+
+PresentationKit has a ``NavigationContext`` that can be used to observe a navigation path, as well as a ``NavigationButton`` that can be used to trigger a navigation with a button instead of a NavigationLink.
