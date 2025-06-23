@@ -11,25 +11,28 @@ import SwiftUI
 public extension View {
 
     /// Register a presentation strategy for a certain error
-    /// type, without any modal view capabilities.
+    /// type, with no modal presentation logic.
     func presentation<Model: Error, AlertActions: View, AlertMessage: View>(
         for model: Model.Type,
         alertContent: @escaping (Model) -> AlertContent<AlertActions, AlertMessage>
     ) -> some View {
         self.modifier(
-            AlertPresentationModifier(
+            AlertModifier(
                 alertContent: alertContent
             )
         )
     }
 
     /// Register a presentation strategy for a certain error
-    /// alert convertible type, with no modal capabilities.
+    /// type, with no modal presentation logic.
+    ///
+    /// This will apply the ``ErrorAlertConvertible`` type's
+    /// error properties to create a standard error alert.
     func presentation<Model: ErrorAlertConvertible>(
-        for model: Model.Type
+        standardErrorAlertFor model: Model.Type
     ) -> some View {
         self.modifier(
-            ErrorAlertConvertiblePresentationModifier<Model>()
+            ErrorAlertModifier<Model>()
         )
     }
 
@@ -49,17 +52,18 @@ public extension View {
         )
     }
 
-    /// Register a presentation strategy for a certain model.
+    /// Register a presentation strategy for a certain model,
+    /// with different views for full screen covers and sheets.
     func presentation<Model: Identifiable, AlertActions: View, AlertMessage: View, CoverContent: View, SheetContent: View>(
         for model: Model.Type,
         alertContent: @escaping (Model) -> AlertContent<AlertActions, AlertMessage>,
-        coverContent: @escaping (Model) -> CoverContent,
+        fullScreenCoverContent: @escaping (Model) -> CoverContent,
         sheetContent: @escaping (Model) -> SheetContent
     ) -> some View {
         self.modifier(
             PresentationModifier(
                 alertContent: alertContent,
-                coverContent: coverContent,
+                coverContent: fullScreenCoverContent,
                 sheetContent: sheetContent
             )
         )
@@ -96,7 +100,7 @@ public extension View {
     }
 }
 
-struct AlertPresentationModifier<Model, AlertActions: View, AlertMessage: View>: ViewModifier {
+struct AlertModifier<Model, AlertActions: View, AlertMessage: View>: ViewModifier {
 
     init(
         alertContent: @escaping (Model) -> AlertContent<AlertActions, AlertMessage>
@@ -129,7 +133,7 @@ struct AlertPresentationModifier<Model, AlertActions: View, AlertMessage: View>:
     }
 }
 
-private extension AlertPresentationModifier {
+private extension AlertModifier {
 
     var alertTitle: LocalizedStringKey {
         guard let val = alertContext.value else { return "" }
@@ -137,7 +141,7 @@ private extension AlertPresentationModifier {
     }
 }
 
-struct ErrorAlertConvertiblePresentationModifier<Model: ErrorAlertConvertible>: ViewModifier {
+struct ErrorAlertModifier<Model: ErrorAlertConvertible>: ViewModifier {
 
     @State var alertContext = AlertContext<Model>()
 
@@ -221,7 +225,7 @@ private extension PresentationModifier {
             .presentation(
                 for: Model.self,
                 alertContent: alertContent,
-                coverContent: coverContent,
+                fullScreenCoverContent: coverContent,
                 sheetContent: sheetContent
             )
     }
@@ -231,7 +235,7 @@ private extension PresentationModifier {
             .presentation(
                 for: Model.self,
                 alertContent: alertContent,
-                coverContent: coverContent,
+                fullScreenCoverContent: coverContent,
                 sheetContent: sheetContent
             )
     }
@@ -261,7 +265,7 @@ private struct MyApp: View {
                         message: { Text("Alert for item #\(value.id)") }
                     )
                 },
-                coverContent: {
+                fullScreenCoverContent: {
                     ModalView(value: $0, title: "Cover")
                 },
                 sheetContent: {
@@ -273,11 +277,11 @@ private struct MyApp: View {
 
 private struct ContentView: View {
 
-    @Environment(AlertContext<Model>.self) private var alert
-    @Environment(FullScreenCoverContext<Model>.self) private var cover
-    @Environment(SheetContext<Model>.self) private var sheet
+    @Environment(AlertContext<Model>.self) var alert
+    @Environment(FullScreenCoverContext<Model>.self) var cover
+    @Environment(SheetContext<Model>.self) var sheet
 
-    private let value = Model(id: 1)
+    let value = Model(id: 1)
 
     var body: some View {
         NavigationStack {
@@ -302,11 +306,11 @@ private struct ModalView: View {
     let value: Model
     let title: String
 
-    @Environment(\.dismiss) private var dismiss
+    @Environment(\.dismiss) var dismiss
 
-    @Environment(AlertContext<Model>.self) private var alert
-    @Environment(FullScreenCoverContext<Model>.self) private var cover
-    @Environment(SheetContext<Model>.self) private var sheet
+    @Environment(AlertContext<Model>.self) var alert
+    @Environment(FullScreenCoverContext<Model>.self) var cover
+    @Environment(SheetContext<Model>.self) var sheet
 
     var body: some View {
         NavigationStack {

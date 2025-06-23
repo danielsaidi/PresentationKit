@@ -28,6 +28,7 @@ extension DemoModel {
 extension FocusedValues {
 
     @Entry var demoModelAlertContext: AlertContext<DemoModel>?
+    @Entry var demoErrorAlertContext: AlertContext<DemoError>?
     @Entry var demoModelCoverContext: FullScreenCoverContext<DemoModel>?
     @Entry var demoModelSheetContext: SheetContext<DemoModel>?
 }

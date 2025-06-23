@@ -32,6 +32,9 @@ public extension PresentationContext {
 @Observable
 public class AlertContext<Model>: PresentationContext {
 
+    /// Create a new context instance.
+    public init() {}
+
     /// The value to present.
     public var value: Model?
 }
@@ -40,6 +43,9 @@ public class AlertContext<Model>: PresentationContext {
 @Observable
 public class FullScreenCoverContext<Model>: PresentationContext {
 
+    /// Create a new context instance.
+    public init() {}
+
     /// The value to present.
     public var value: Model?
 }
@@ -47,6 +53,9 @@ public class FullScreenCoverContext<Model>: PresentationContext {
 /// This type can be used to manage sheet presentation state.
 @Observable
 public class SheetContext<Model>: PresentationContext {
+
+    /// Create a new context instance.
+    public init() {}
 
     /// The value to present.
     public var value: Model?

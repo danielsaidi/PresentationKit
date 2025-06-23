@@ -14,7 +14,7 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             DemoActions()
-                .navigationTitle("Demo")
+                .navigationTitle("Title.Demo")
         }
     }
 }

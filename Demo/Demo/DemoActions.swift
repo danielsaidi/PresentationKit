@@ -14,48 +14,25 @@ import SwiftUI
 struct DemoActions: View, ErrorAlerter {
 
     @Environment(AlertContext<DemoModel>.self) var alert
-    @Environment(AlertContext<DemoError>.self) var alertContext
     @Environment(FullScreenCoverContext<DemoModel>.self) var cover
+    @Environment(AlertContext<DemoError>.self) var errorAlertContext
     @Environment(SheetContext<DemoModel>.self) var sheet
-
-    var errorAlertContext: PresentationKit.AlertContext<DemoError> {
-        alertContext
-    }
-
-    private let value = DemoModel(id: 1)
 
     var body: some View {
         NavigationStack {
             List {
-                Section("Presentation") {
-                    Button {
-                        alert.present(.init(id: 1))
-                    } label: {
-                        label("Present an alert", "exclamationmark.triangle")
-                    }
-                    #if !os(macOS)
-                    Button {
-                        cover.present(.init(id: 2))
-                    } label: {
-                        label("Present a full screen modal", "rectangle.portrait.on.rectangle.portrait")
-                    }
-                    #endif
-                    Button {
-                        sheet.present(.init(id: 3))
-                    } label: {
-                        label("Present a sheet", "rectangle.portrait.on.rectangle.portrait.angled")
-                    }
-                    Button {
-                        sheet.present(.prefersInlineSheetPresentation)
-                    } label: {
-                        label("Present an inline sheet", "inset.filled.bottomhalf.rectangle.portrait")
-                    }
+                Section("Actions.Presentation") {
+                    DemoPresentationActions(
+                        alert: alert,
+                        cover: cover,
+                        sheet: sheet
+                    )
                 }
-                Section("Errors") {
+                Section("Actions.ErrorHandling") {
                     Button {
                         tryWithErrorAlert(performFailingOperation)
                     } label: {
-                        label("Alert a failing operation", "exclamationmark.triangle")
+                        label("Action.PerformFailingOperation", .alert)
                     }
                 }
             }
@@ -63,17 +40,61 @@ struct DemoActions: View, ErrorAlerter {
             .focusedValue(\.demoModelAlertContext, alert)
             .focusedValue(\.demoModelCoverContext, cover)
             .focusedValue(\.demoModelSheetContext, sheet)
+            .buttonStyle(.borderless)
         }
+    }
+}
+
+struct DemoPresentationActions: View {
+
+    var alert: AlertContext<DemoModel>?
+    var cover: FullScreenCoverContext<DemoModel>?
+    var sheet: SheetContext<DemoModel>?
+
+    var body: some View {
+        Group {
+            Button {
+                alert?.present(.init(id: 1))
+            } label: {
+                label("Action.PresentAlert", .alert)
+            }
+            #if !os(macOS)
+            Button {
+                cover?.present(.init(id: 2))
+            } label: {
+                label("Action.PresentFullScreenCover", .fullScreenCover)
+            }
+            #endif
+            Button {
+                sheet?.present(.init(id: 3))
+            } label: {
+                label("Action.PresentSheet", .sheet)
+            }
+            Button {
+                sheet?.present(.prefersInlineSheetPresentation)
+            } label: {
+                label("Action.PresentInlineSheet", .inlineSheet)
+            }
+        }
+        // .disabled(isDisabled)
+    }
+}
+
+private extension DemoPresentationActions {
+
+    var isDisabled: Bool {
+        alert != nil || cover != nil || sheet != nil
     }
 }
 
 private extension View {
 
-    func label(_ title: String, _ systemImageName: String) -> some View {
-        Label(
-            title,
-            systemImage: systemImageName
-        )
+    func label(_ title: LocalizedStringKey, _ image: Image) -> some View {
+        Label {
+            Text(title)
+        } icon: {
+            image
+        }
     }
 
     func performFailingOperation() async throws {

@@ -9,10 +9,16 @@
 import PresentationKit
 import SwiftUI
 
+/// This view is used as a modal screen, for all full screen
+/// covers and sheets.
+///
+/// Note that this view applies the demo presentation action
+/// again, to ensure that all presentations that are used by
+/// the demo are properly registered.
 struct DemoModal: View {
 
     let value: DemoModel
-    let title: String
+    let title: LocalizedStringKey
 
     @Environment(\.dismiss) private var dismiss
 
@@ -23,12 +29,13 @@ struct DemoModal: View {
                 .navigationTitle(title)
                 .toolbar {
                     ToolbarItem(placement: .confirmationAction) {
-                        Button("Dismiss", role: .cancel) {
+                        Button("Action.Dismiss", role: .cancel) {
                             dismiss()
                         }
                     }
                 }
         }
+        .withDemoPresentation()     // <- OBS
     }
 }
 
@@ -36,7 +43,7 @@ struct DemoModal: View {
     DemoPreview {
         DemoModal(
             value: .init(id: 1),
-            title: "Modal"
+            title: "Title.Modal"
         )
     }
 }
