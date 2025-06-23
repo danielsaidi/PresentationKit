@@ -15,7 +15,7 @@ import SwiftUI
 /// and inject it into the view environment when you apply a
 /// `.presentation(for: ...)` view modifier.
 public protocol PresentationContext: AnyObject {
-    associatedtype Model: Identifiable
+    associatedtype Model
 
     var value: Model? { get set }
 }
@@ -30,7 +30,7 @@ public extension PresentationContext {
 
 /// This type can be used to present alerts.
 @Observable
-public class AlertContext<Model: Identifiable>: PresentationContext {
+public class AlertContext<Model>: PresentationContext {
 
     /// The value to present.
     public var value: Model?
@@ -38,7 +38,7 @@ public class AlertContext<Model: Identifiable>: PresentationContext {
 
 /// This type can be used to present full screen covers.
 @Observable
-public class FullScreenCoverContext<Model: Identifiable>: PresentationContext {
+public class FullScreenCoverContext<Model>: PresentationContext {
 
     /// The value to present.
     public var value: Model?
@@ -46,7 +46,7 @@ public class FullScreenCoverContext<Model: Identifiable>: PresentationContext {
 
 /// This type can be used to manage sheet presentation state.
 @Observable
-public class SheetContext<Model: Identifiable>: PresentationContext {
+public class SheetContext<Model>: PresentationContext {
 
     /// The value to present.
     public var value: Model?

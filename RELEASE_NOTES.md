@@ -5,6 +5,16 @@ PresentationKit will use semver after 1.0.
 Until then, breaking changes can happen in any version, and deprecations may be removed in any minor version bump.
 
 
+## 0.3
+
+This version adds new navigation utilities.
+
+### 💡 Adjustments
+
+* `PresentationContext` no longer requires models to be identifiable.
+
+
+
 ## 0.2
 
 This version adds new navigation utilities.

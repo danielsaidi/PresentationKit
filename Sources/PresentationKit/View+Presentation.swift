@@ -258,7 +258,6 @@ private struct ModalView: View {
     }
 }
 
-
 #Preview("Documentation") {
 
     MyApp()
