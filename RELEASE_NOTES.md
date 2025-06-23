@@ -7,7 +7,11 @@ Until then, breaking changes can happen in any version, and deprecations may be 
 
 ## 0.3
 
-This version adds new navigation utilities.
+This version adds new error utilities.
+
+### ✨ New Features
+
+* `ErrorAlerter` can be implemented to make it easy to handle errors.
 
 ### 💡 Adjustments
 
