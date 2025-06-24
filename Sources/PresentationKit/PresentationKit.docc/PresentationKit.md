@@ -70,7 +70,7 @@ PresentationKit is available under the MIT license.
 - ``AlertContent``
 - ``FullScreenCoverContext``
 - ``SheetContext``
-- ``ValuePresentation``
+- ``ModelPresentation``
 
 ### Errors
 

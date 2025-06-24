@@ -1,5 +1,5 @@
 //
-//  View+ValuePresentations.swift
+//  View+ModelPresentations.swift
 //  PresentationKit
 //
 //  Created by Daniel Saidi on 2025-06-19.

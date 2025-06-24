@@ -1,5 +1,5 @@
 //
-//  ValuePresentationContexts.swift
+//  ModelPresentationContexts.swift
 //  PresentationKit
 //
 //  Created by Daniel Saidi on 2025-06-19.
@@ -13,14 +13,14 @@ import SwiftUI
 ///
 /// Use a `.presentation(for: ...)` view modifier to apply a
 /// context-based presentation strategy to the app root view.
-public protocol ValuePresentation: AnyObject {
+public protocol ModelPresentation: AnyObject {
 
     associatedtype Model
 
     var value: Model? { get set }
 }
 
-public extension ValuePresentation {
+public extension ModelPresentation {
 
     /// Present the provided value.
     func present(_ value: Model) {
@@ -30,7 +30,7 @@ public extension ValuePresentation {
 
 /// This context can be used to present alerts.
 @Observable
-public final class AlertContext<Model>: ValuePresentation {
+public final class AlertContext<Model>: ModelPresentation {
 
     /// Create a new context instance.
     public init() {}
@@ -41,7 +41,7 @@ public final class AlertContext<Model>: ValuePresentation {
 
 /// This context can be used to present full screen covers.
 @Observable
-public final class FullScreenCoverContext<Model>: ValuePresentation {
+public final class FullScreenCoverContext<Model>: ModelPresentation {
 
     /// Create a new context instance.
     public init() {}
@@ -52,7 +52,7 @@ public final class FullScreenCoverContext<Model>: ValuePresentation {
 
 /// This context can be used to present sheets.
 @Observable
-public final class SheetContext<Model>: ValuePresentation {
+public final class SheetContext<Model>: ModelPresentation {
 
     /// Create a new context instance.
     public init() {}
