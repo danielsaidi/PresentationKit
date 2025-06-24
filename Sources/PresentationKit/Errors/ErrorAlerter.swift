@@ -11,17 +11,13 @@ import SwiftUI
 /// This protocol can be implemented by any type that can be
 /// used to alert errors.
 ///
-/// The protocol can for instance be implemented by any view
-/// that should be able to perform a throwing async function
-/// with a failure alert.
+/// The protocol can be implemented by a view that should be
+/// able to perform any throwing async function. It can then
+/// use ``tryWithErrorAlert(_:)`` to perform async functions
+/// and alert any errors that are thrown.
 ///
-/// By implementing this protocol, a type gets access to new
-/// alert functions and ``tryWithErrorAlert(_:)``, which can
-/// be used to perform an async function and alert any error.
-///
-/// If you throw errors that implement the custom error type
-/// ``ErrorAlertConvertible`` you get full control over what
-/// the alert will present.
+/// If you throw an ``ErrorAlertConvertible``, the type will
+/// automatically determine which alert that is shown.
 public protocol ErrorAlerter {
 
     associatedtype ErrorType: Error

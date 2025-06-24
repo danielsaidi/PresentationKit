@@ -2,9 +2,9 @@
 
 This article describes how to get started with PresentationKit.
 
-PresentationKit makes it easy to present alerts, full screen covers, and sheets, using the observable ``AlertContext``, ``FullScreenCoverContext``, and ``SheetContext`` types together with any kind of model that we want to present.
+PresentationKit makes it easy to present any type in alerts, full screen covers and sheets, using the observable ``AlertContext``, ``FullScreenCoverContext``, and ``SheetContext`` classes.
 
-All we have to do to be able to present a model in an alert or a modal, from anywhere in our app, is to apply a ``SwiftUICore/View/presentation(for:alertContent:fullScreenCoverContent:sheetContent:)`` view modifier to the application root:
+All we have to do to be able to present a type, is to apply a presentation modifier to the application root for the type we want to present:
 
 ```swift
 @main
@@ -37,9 +37,9 @@ struct MyApp: App {
 }
 ```
 
-This will ensure that the registered model is presented in the way we specify. You can omit any builder that you're not going to use. For instance, you don't have to provide an alert content builder if you don't intend to present your model in an alert.
+You can omit any builder that you're not going to use. For instance, you don't have to provide an alert content if you won't alert the type.
 
-The presentation will inject observable presentation contexts into the environment. We can use these contexts to present model values from anywhere within our app:
+The presentation will inject presentation contexts into the environment, which we can use to present values from anywhere in the app:
 
 ```swift
 struct ContentView: View {
@@ -69,27 +69,26 @@ struct ContentView: View {
 }
 ```
 
-PresentationKit will create and inject new contexts when we present modals. This means that we only have to specify our presentation strategy *once*, after which the same presentations will work in the entire app.
+PresentationKit will create and inject new contexts for new modals. This means that we only have to specify our presentation strategy *once*, after which the same presentations will work in the entire app.
+
+> Important: When using multiple presentation modifiers, we must apply the presentation strategy to our modals as well, since we will otherwise not get all the contexts injected. See the demo for an example on how we can do this automatically. 
 
 
 
 ## Going Further
 
-### Multiple Presentation Modifiers
+### Legacy Presentation Contexts
 
-PresentationKit supports registering different presentation strategies for different models, which means that we can chain presentation strategies together to support multiple model and error types. 
+PresentationKit has ``AnyPresentationContext`` types that are kept for legacy purposes. Thes contexts make it possible to present alerts and views via injected contexts. This is a lot more flexible, but doesn't use the item presentation approach of modern SwiftUI.
 
-However, since each presentation modifier will only create and inject new contexts for its specific model, we must apply the same multi-presentation strategy for every new modal that we create, otherwise new modals will lack injected environment values.
-
-See the demo app for examples on how you can apply the same presentation modifier to both the app root view and its modal screens. 
-
+You can use the ``AnyAlertContext``, ``AnyFullScreenCoverContext``, and ``AnySheetContext`` and their related view modifiers, but this part of the library may be removed in a future update.
 
 
 ### Multi-Window Apps & Focus Values
 
-Multi-windowed apps must be able to keep track of the contexts that belong to the current window, so that the correct contexts can be used to present alerts and modals from global places, like commands and the menu bar.
+Multi-windowed apps must be able to keep track of the contexts that belong to the current window, so that the correct values are used.
 
-To handle this with the generic context classes, you have to create type-specific focused values:
+While the ``AnyPresentationContext`` contexts have focused values, you must create specific focused values for the generic ones:
 
 ```swift
 struct MyModel: Identifiable { ... }

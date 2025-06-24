@@ -30,9 +30,7 @@ public protocol ErrorAlertConvertible: Error {
 
 public extension ErrorAlertConvertible {
 
-    /// Create an error `Alert`.
-    ///
-    /// This can be used
+    /// Create an error `Alert` for the type.
     var errorAlert: Alert {
         Alert(
             title: Text(alertTitle),

@@ -1,5 +1,5 @@
 //
-//  ValuePresentation.swift
+//  ValuePresentationContexts.swift
 //  PresentationKit
 //
 //  Created by Daniel Saidi on 2025-06-19.
@@ -30,7 +30,7 @@ public extension ValuePresentation {
 
 /// This context can be used to present alerts.
 @Observable
-public class AlertContext<Model>: ValuePresentation {
+public final class AlertContext<Model>: ValuePresentation {
 
     /// Create a new context instance.
     public init() {}
@@ -41,7 +41,7 @@ public class AlertContext<Model>: ValuePresentation {
 
 /// This context can be used to present full screen covers.
 @Observable
-public class FullScreenCoverContext<Model>: ValuePresentation {
+public final class FullScreenCoverContext<Model>: ValuePresentation {
 
     /// Create a new context instance.
     public init() {}
@@ -52,7 +52,7 @@ public class FullScreenCoverContext<Model>: ValuePresentation {
 
 /// This context can be used to present sheets.
 @Observable
-public class SheetContext<Model>: ValuePresentation {
+public final class SheetContext<Model>: ValuePresentation {
 
     /// Create a new context instance.
     public init() {}
