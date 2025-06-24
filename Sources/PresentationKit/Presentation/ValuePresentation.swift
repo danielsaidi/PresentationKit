@@ -1,5 +1,5 @@
 //
-//  Contexts.swift
+//  ValuePresentation.swift
 //  PresentationKit
 //
 //  Created by Daniel Saidi on 2025-06-19.
@@ -9,18 +9,18 @@
 import SwiftUI
 
 /// This protocol is implemented by the various presentation
-/// context types.
+/// context types that support value-based presentations.
 ///
-/// The library will create a context instance of every type
-/// and inject it into the view environment when you apply a
-/// `.presentation(for: ...)` view modifier.
-public protocol PresentationContext: AnyObject {
+/// Use a `.presentation(for: ...)` view modifier to apply a
+/// context-based presentation strategy to the app root view.
+public protocol ValuePresentation: AnyObject {
+
     associatedtype Model
 
     var value: Model? { get set }
 }
 
-public extension PresentationContext {
+public extension ValuePresentation {
 
     /// Present the provided value.
     func present(_ value: Model) {
@@ -28,9 +28,9 @@ public extension PresentationContext {
     }
 }
 
-/// This type can be used to present alerts.
+/// This context can be used to present alerts.
 @Observable
-public class AlertContext<Model>: PresentationContext {
+public class AlertContext<Model>: ValuePresentation {
 
     /// Create a new context instance.
     public init() {}
@@ -39,9 +39,9 @@ public class AlertContext<Model>: PresentationContext {
     public var value: Model?
 }
 
-/// This type can be used to present full screen covers.
+/// This context can be used to present full screen covers.
 @Observable
-public class FullScreenCoverContext<Model>: PresentationContext {
+public class FullScreenCoverContext<Model>: ValuePresentation {
 
     /// Create a new context instance.
     public init() {}
@@ -50,9 +50,9 @@ public class FullScreenCoverContext<Model>: PresentationContext {
     public var value: Model?
 }
 
-/// This type can be used to manage sheet presentation state.
+/// This context can be used to present sheets.
 @Observable
-public class SheetContext<Model>: PresentationContext {
+public class SheetContext<Model>: ValuePresentation {
 
     /// Create a new context instance.
     public init() {}

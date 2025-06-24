@@ -66,11 +66,11 @@ PresentationKit is available under the MIT license.
 
 ### Essentials
 
-- ``PresentationContext``
 - ``AlertContext``
 - ``AlertContent``
 - ``FullScreenCoverContext``
 - ``SheetContext``
+- ``ValuePresentation``
 
 ### Errors
 

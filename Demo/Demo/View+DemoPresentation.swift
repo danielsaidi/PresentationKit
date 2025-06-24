@@ -20,7 +20,7 @@ extension View {
     func withDemoPresentation() -> some View {
         self
             .presentation(
-                standardErrorAlertFor: DemoError.self
+                standardAlertFor: DemoError.self
             )
             .presentation(
                 for: DemoModel.self,

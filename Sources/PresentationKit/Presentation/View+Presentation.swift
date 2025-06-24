@@ -25,11 +25,8 @@ public extension View {
 
     /// Register a presentation strategy for a certain error
     /// type, with no modal presentation logic.
-    ///
-    /// This will apply the ``ErrorAlertConvertible`` type's
-    /// error properties to create a standard error alert.
     func presentation<Model: ErrorAlertConvertible>(
-        standardErrorAlertFor model: Model.Type
+        standardAlertFor model: Model.Type
     ) -> some View {
         self.modifier(
             ErrorAlertModifier<Model>()
