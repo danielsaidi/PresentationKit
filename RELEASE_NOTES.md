@@ -5,6 +5,13 @@ PresentationKit will use semver after 1.0.
 Until then, breaking changes can happen in any version, and deprecations may be removed in any minor version bump.
 
 
+
+## 0.4
+
+This version adds new legacy models, which can be used to present any alerts or views.
+
+
+
 ## 0.3.1
 
 This version adds new error utilities.
