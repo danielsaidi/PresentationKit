@@ -6,6 +6,12 @@ Until then, breaking changes can happen in any version, and deprecations may be 
 
 
 
+## 0.4.2
+
+This version adds a `.popToRoot()` to `NavigationContext`.
+
+
+
 ## 0.4.1
 
 This version makes the navigation context initializer public.

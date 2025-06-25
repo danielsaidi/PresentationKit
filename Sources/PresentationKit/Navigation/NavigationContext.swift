@@ -26,6 +26,11 @@ public extension NavigationContext {
         path.removeLast(steps)
     }
 
+    /// Pop back to the root.
+    func popToRoot() {
+        path = []
+    }
+
     /// Push a new value onto the stack.
     func push(_ value: Model) {
         path.append(value)
