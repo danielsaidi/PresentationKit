@@ -12,6 +12,9 @@ import SwiftUI
 @Observable
 public class NavigationContext<Model: Hashable> {
 
+    /// Create a new navigation context instance.
+    public init() {}
+
     /// The navigation path.
     public var path = [Model]()
 }

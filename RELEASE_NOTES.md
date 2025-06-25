@@ -6,6 +6,12 @@ Until then, breaking changes can happen in any version, and deprecations may be 
 
 
 
+## 0.4.1
+
+This version makes the navigation context initializer public.
+
+
+
 ## 0.4
 
 This version adds new legacy models, which can be used to present any alerts or views.
