@@ -8,16 +8,13 @@
 
 import SwiftUI
 
-/// This protocol can be implemented by any type that can be
-/// used to alert errors, using an ``AnyAlertContext``.
+/// This protocol can be implemented by types that can alert errors.
 ///
-/// The protocol can be implemented by a view that should be
-/// able to perform any throwing async function. It can then
-/// use ``tryWithErrorAlert(_:)`` to perform async functions
-/// and alert any errors that are thrown.
+/// This protocol extends types with a ``tryWithErrorAlert(_:)`` function,
+/// which can be used to perform any throwing async function and alert any errors.
 ///
-/// If you throw an ``ErrorAlertConvertible``, the type will
-/// automatically determine which alert that is shown.
+/// If you throw an ``ErrorAlertConvertible`` error type, then that type is
+/// responsible for determining the alert that is shown.
 public protocol AnyErrorAlerter {
 
     var alert: AnyAlertContext { get }
@@ -28,9 +25,8 @@ public extension AnyErrorAlerter {
 
     /// Alert the provided error.
     ///
-    /// If the error implements ``ErrorAlertConvertible`` it
-    /// will use its specific alert, otherwise the localized
-    /// error description will be used.
+    /// If the error implements ``ErrorAlertConvertible`` it will use that
+    /// specific alert, otherwise the localized error description will be used.
     func alert(
         error: Error,
         okButtonText: String = "OK"
@@ -72,8 +68,7 @@ public extension AnyErrorAlerter {
         )
     }
 
-    /// Try to perform a block-based operation, and alert if
-    /// this operation fails in any way.
+    /// Try to perform a block-based operation, and alert any thrown errors.
     @MainActor func tryWithErrorAlert<ErrorType: Error>(
         _ operation: @escaping BlockOperation<ErrorType>,
         completion: @escaping BlockCompletion<ErrorType>
@@ -87,11 +82,7 @@ public extension AnyErrorAlerter {
         }
     }
     
-    /// Try to perform an async operation, and alert if this
-    /// operation fails in any way.
-    ///
-    /// This function wraps an async operation in a task and
-    /// alerts any errors that are thrown.
+    /// Try to perform an async operation, and alert any thrown errors.
     @MainActor func tryWithErrorAlert(_ operation: @escaping AsyncOperation) {
         Task {
             do {

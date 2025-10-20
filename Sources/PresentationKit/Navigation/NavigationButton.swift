@@ -8,8 +8,7 @@
 
 import SwiftUI
 
-/// This view renders a `Button` and a navigation chevron to
-/// mimic a native `NavigatonLink`.
+/// This view renders a `Button` that mimics a native `NavigatonLink`.
 public struct NavigationButton<Content: View>: View {
     
     public init(

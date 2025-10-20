@@ -8,16 +8,14 @@
 
 import SwiftUI
 
-/// This protocol can be implemented by any type that can be
-/// used to alert errors.
+/// This protocol can be implemented by any type that can be used to alert errors.
 ///
-/// The protocol can be implemented by a view that should be
-/// able to perform any throwing async function. It can then
-/// use ``tryWithErrorAlert(_:)`` to perform async functions
-/// and alert any errors that are thrown.
+/// The protocol can be implemented by views that should be able to perform any
+/// throwing async function. It can then use ``tryWithErrorAlert(_:)`` to
+/// perform any async functions and alert all thrown errors.
 ///
-/// If you throw an ``ErrorAlertConvertible``, the type will
-/// automatically determine which alert that is shown.
+/// If you throw an ``ErrorAlertConvertible``, that type will automatically
+/// determine which alert that is shown.
 public protocol ErrorAlerter {
 
     associatedtype ErrorType: Error
@@ -30,10 +28,6 @@ public protocol ErrorAlerter {
 public extension ErrorAlerter {
 
     /// Alert an error error.
-    ///
-    /// If you alert an ``ErrorAlertConvertible`` you should
-    /// show its ``ErrorAlertConvertible/errorAlert`` in the
-    /// alert context's view builder.
     func alert(
         error: ErrorType,
         okButtonText: String = "OK"
@@ -41,8 +35,7 @@ public extension ErrorAlerter {
         errorAlertContext.present(error)
     }
 
-    /// Try to perform a throwing async operation, and alert
-    /// any errors that are thrown.
+    /// Try to perform a throwing async operation, and alert any thrown error.
     func tryWithErrorAlert(_ operation: @escaping AsyncOperation) {
         Task {
             do {
@@ -55,8 +48,7 @@ public extension ErrorAlerter {
         }
     }
 
-    /// Try to perform a throwing async operation, and alert
-    /// any errors that are thrown.
+    /// Try to perform a throwing async operation, and alert any thrown error.
     func tryWithErrorAlert(
         _ operation: @escaping BlockOperation<ErrorType>,
         completion: @escaping BlockCompletion<ErrorType>

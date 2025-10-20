@@ -8,8 +8,7 @@
 
 import SwiftUI
 
-/// This view can be used to render a navigation chevron, to
-/// mimic the chevron that is used in lists.
+/// This view mimic the native navigation chevron that is used in lists.
 public struct NavigationChevron: View {
 
     public init() {}

@@ -10,8 +10,7 @@ import SwiftUI
 
 public extension View {
 
-    /// Register a presentation strategy for a certain error
-    /// type, with no modal presentation logic.
+    /// Register a presentation strategy for a certain error type.
     func presentation<Model: Error, AlertActions: View, AlertMessage: View>(
         for model: Model.Type,
         alertContent: @escaping (Model) -> AlertContent<AlertActions, AlertMessage>
@@ -23,8 +22,7 @@ public extension View {
         )
     }
 
-    /// Register a presentation strategy for a certain error
-    /// type, with no modal presentation logic.
+    /// Register a presentation strategy for a certain error type.
     func presentation<Model: ErrorAlertConvertible>(
         standardAlertFor model: Model.Type
     ) -> some View {
@@ -33,8 +31,8 @@ public extension View {
         )
     }
 
-    /// Register a presentation strategy for a certain model,
-    /// with the same view for full screen covers and sheets.
+    /// Register a presentation strategy for a certain model, using the same view
+    /// for full screen covers and sheets.
     func presentation<Model: Identifiable, AlertActions: View, AlertMessage: View, ModalContent: View>(
         for model: Model.Type,
         alertContent: @escaping (Model) -> AlertContent<AlertActions, AlertMessage>,
@@ -49,8 +47,8 @@ public extension View {
         )
     }
 
-    /// Register a presentation strategy for a certain model,
-    /// with different views for full screen covers and sheets.
+    /// Register a presentation strategy for a certain model, using different views
+    /// for full screen covers and sheets.
     func presentation<Model: Identifiable, AlertActions: View, AlertMessage: View, CoverContent: View, SheetContent: View>(
         for model: Model.Type,
         alertContent: @escaping (Model) -> AlertContent<AlertActions, AlertMessage>,
@@ -66,8 +64,8 @@ public extension View {
         )
     }
 
-    /// Register a presentation strategy for a certain model,
-    /// with the same view for full screen covers and sheets.
+    /// Register a presentation strategy for a certain model, using the same view
+    /// for full screen covers and sheets.
     func presentation<Model: Identifiable, ModalContent: View>(
         for model: Model.Type,
         modalContent: @escaping (Model) -> ModalContent

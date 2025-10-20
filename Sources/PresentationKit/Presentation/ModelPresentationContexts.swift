@@ -8,10 +8,10 @@
 
 import SwiftUI
 
-/// This protocol is implemented by the various presentation
-/// context types that support value-based presentations.
+/// This protocol is implemented by the various presentation contexts that support
+/// value-based presentations.
 ///
-/// Use a `.presentation(for: ...)` view modifier to apply a
+/// Use the various `.presentation(for: ...)` view modifiers to apply any
 /// context-based presentation strategy to the app root view.
 public protocol ModelPresentation: AnyObject {
 

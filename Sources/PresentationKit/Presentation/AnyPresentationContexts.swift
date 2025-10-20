@@ -9,21 +9,17 @@
 import Combine
 import SwiftUI
 
-/// This class is inherited by various presentation contexts
-/// that support view-based presentations.
+/// This class is inherited by various presentation contexts.
 ///
-/// Unlike the value-based presentation contexts, this class
-/// lets you present a generic content type.
+/// Unlike the value-based contexts, this class lets you use generic content types.
 ///
-/// Use an `.alert`, `.fullScreenCover` or `.sheet` modifier
-/// with a corresponding context class to inject the context
-/// into the environment. You can then use the context value
-/// to present alerts, covers, and sheets.
+/// Use `.alert`, `.fullScreenCover` or `.sheet` with a corresponding
+/// context class to inject it into the environment. You can then use that context to
+/// present alerts, covers, and sheets.
 ///
-/// > Note: The "any" concept is kept for migration purposes,
-/// since many apps rely on the old presentation contexts in
-/// SwiftUIKit. Since item-based presentation is the SwiftUI
-/// future, these contexts will be removed in the future.
+/// > Note: The "any" concept is kept for migration purposes, since many apps rely
+/// on the old presentation contexts in SwiftUIKit. Since item-based presentation is
+/// the SwiftUI future, these contexts will be removed in the future.
 open class AnyPresentation<Content>: ObservableObject {
 
     public init() {}
@@ -71,9 +67,8 @@ public extension AnyPresentation {
 
 /// This context can be used to present alerts.
 ///
-/// To use this class, just create a `@StateObject` instance
-/// in your and bind it to any view, using the context-based
-/// `.alert` modifier.
+/// To use this class, just create a `@StateObject` instance in your and bind it
+/// to any view, using the context-based `.alert` modifier.
 public class AnyAlertContext: AnyPresentation<Alert> {
 
     @MainActor
@@ -108,9 +103,8 @@ public extension FocusedValues {
 
 /// This context can be used to present full screen covers.
 ///
-/// To use this class, just create a `@StateObject` instance
-/// in your and bind it to any view, using the context-based
-/// `.fullScreenCover` modifier.
+/// To use this class, just create a `@StateObject` instance in your and bind it
+/// to any view, using the context-based `.fullScreenCover` modifier.
 public class AnyFullScreenCoverContext: AnyPresentation<AnyView> {
 
     @MainActor
@@ -152,9 +146,8 @@ public extension FocusedValues {
 
 /// This context can be used to present sheets.
 ///
-/// To use this class, just create a `@StateObject` instance
-/// in your and bind it to any view, using the context-based
-/// `.sheet` modifier.
+/// To use this class, just create a `@StateObject` instance in your and bind it
+/// to any view, using the context-based `.sheet` modifier.
 public class AnySheetContext: AnyPresentation<AnyView> {
 
     @MainActor
