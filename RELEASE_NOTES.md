@@ -6,6 +6,12 @@ Until then, breaking changes can happen in any version, and deprecations may be 
 
 
 
+## 0.5
+
+This version makes the SDK use Swift 6.1 and bumps the demo to Xcode 26.
+
+
+
 ## 0.4.2
 
 This version adds a `.popToRoot()` to `NavigationContext`.
