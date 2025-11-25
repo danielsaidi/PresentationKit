@@ -7,7 +7,6 @@
     <img src="https://img.shields.io/badge/swift-6.1-orange.svg" alt="Swift 6.1" />
     <a href="https://danielsaidi.github.io/PresentationKit"><img src="https://img.shields.io/badge/documentation-web-blue.svg" alt="Documentation" /></a>
     <a href="https://github.com/danielsaidi/PresentationKit/blob/master/LICENSE"><img src="https://img.shields.io/github/license/danielsaidi/PresentationKit" alt="MIT License" /></a>
-    <a href="https://github.com/sponsors/danielsaidi"><img src="https://img.shields.io/badge/sponsor-GitHub-red.svg" alt="Sponsor my work" /></a>
 </p>
 
 
@@ -22,7 +21,6 @@ PresentationKit is a SwiftUI library that makes it easy to present alerts, sheet
 PresentationKit lets you register a presentation for any identifiable model, and will create and inject unique context values for each modal layer. This lets you use the current contexts to present new content from any view.
 
 
-
 ## Installation
 
 PresentationKit can be installed with the Swift Package Manager:
@@ -32,17 +30,9 @@ https://github.com/danielsaidi/PresentationKit.git
 ```
 
 
-
 ## Supported Platforms
 
 PresentationKit supports iOS 17, tvOS 17, macOS 14, watchOS 10, and visionOS 1.
-
-
-
-## Support My Work
-
-You can [become a sponsor][Sponsors] to help me dedicate more time on my various [open-source tools][OpenSource]. Every contribution, no matter the size, makes a real difference in keeping these tools free and actively developed.
-
 
 
 ## Getting Started
@@ -121,17 +111,19 @@ PresentationKit also has an ``ErrorAlerter`` protocol that makes it easy to auto
 For more information regarding more complex presentation strategies and functionality not covered by this guide, please see the [getting-started guide][Getting-Started].
 
 
-
 ## Documentation
 
 The online [documentation][Documentation] has more information, articles, code examples, etc.
-
 
 
 ## Demo Application
 
 The `Demo` folder has a demo app that lets you explore the library.
 
+
+## Support My Work
+
+You can [become a sponsor][Sponsors] to help me dedicate more time on my various [open-source tools][OpenSource]. Every contribution, no matter the size, makes a real difference in keeping these tools free and actively developed.
 
 
 ## Contact
@@ -144,11 +136,9 @@ Feel free to reach out if you have questions, or want to contribute in any way:
 * Mastodon: [@danielsaidi@mastodon.social][Mastodon]
 
 
-
 ## License
 
 PresentationKit is available under the MIT license. See the [LICENSE][License] file for more info.
-
 
 
 [Email]: mailto:daniel.saidi@gmail.com
