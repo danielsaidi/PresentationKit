@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-/// This type can be used to manage navigation stack paths.
+/// This type can be used to manage a value-based navigation.
 @Observable
 public class NavigationContext<Model: Hashable> {
 

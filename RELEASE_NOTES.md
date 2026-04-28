@@ -10,6 +10,11 @@ Until then, breaking changes can happen in any version, and deprecations may be 
 
 This version removes a lot of legacy protocols and models.
 
+### ✨ New Features
+
+* `PresentationContext` is a new context that replaces the old ones.
+
+
 ### 💥 Breaking Changes
 
 * `AnyAlertContext` has been removed.
@@ -17,6 +22,11 @@ This version removes a lot of legacy protocols and models.
 * `AnyFullScreenCoverContext` has been removed.
 * `AnySheetContext` has been removed.
 * `AnyPresentation` has been removed.
+* `AlertContext` has been replaced with `PresentationContext`.
+* `ModelPresentation` has been removed.
+* `FullScreenCoverContext` has been replaced with `PresentationContext`.
+* `SheetContext` has been replaced with `PresentationContext`.
+* `View.presentation(...)` has been removed.
 
 
 
