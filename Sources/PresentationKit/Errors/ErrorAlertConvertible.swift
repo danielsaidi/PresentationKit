@@ -8,11 +8,11 @@
 
 import SwiftUI
 
-/// This protocol can be implemented by error types that should be able to create
-/// their own ``errorAlert``.
+/// This protocol can be implemented by any type that can be
+/// converted to an error.
 ///
-/// By implementing this protocol, a type can define a custom alert title, message,
-/// and button text. You can use ``SwiftUICore/View/presentation(for:)``
+/// By implementing the protocol, a type can define a custom
+/// alert title, message, and button text. You can use ``SwiftUICore/View/presentation(for:)``
 /// to set up a presentation strategy that uses your specific error type.
 public protocol ErrorAlertConvertible: Error {
 
