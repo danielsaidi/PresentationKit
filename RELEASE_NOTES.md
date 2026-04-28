@@ -6,6 +6,20 @@ Until then, breaking changes can happen in any version, and deprecations may be 
 
 
 
+## 1.0
+
+This version removes a lot of legacy protocols and models.
+
+### 💥 Breaking Changes
+
+* `AnyAlertContext` has been removed.
+* `AnyErrorAlerter` has been removed.
+* `AnyFullScreenCoverContext` has been removed.
+* `AnySheetContext` has been removed.
+* `AnyPresentation` has been removed.
+
+
+
 ## 0.5
 
 This version makes the SDK use Swift 6.1 and bumps the demo to Xcode 26.

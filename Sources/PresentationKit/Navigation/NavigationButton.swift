@@ -8,7 +8,8 @@
 
 import SwiftUI
 
-/// This view renders a `Button` that mimics a native `NavigatonLink`.
+/// This `Button` mimics a native `NavigatonLink`. It can be
+/// used to trigger a function in combination with a push.
 public struct NavigationButton<Content: View>: View {
     
     public init(

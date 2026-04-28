@@ -12,13 +12,14 @@
 
 # PresentationKit
 
-PresentationKit is a SwiftUI library that makes it easy to present alerts, sheets, and full screen covers for any type, using observable ``AlertContext``, ``FullScreenCoverContext``, and ``SheetContext`` classes.
+PresentationKit is a SwiftUI library for presenting alerts, sheets, and modals in various ways.
 
 <p align="center">
     <img src="https://github.com/danielsaidi/PresentationKit/releases/download/0.1.0/PresentationKit-Demo.gif" alt="Demo Gif" width="300" />
 </p>
 
-PresentationKit lets you register a presentation for any identifiable model, and will create and inject unique context values for each modal layer. This lets you use the current contexts to present new content from any view.
+For instance, you can implement the `ErrorAlerter` protocol to easily perform async tasks with automatic error alerting. 
+
 
 
 ## Installation
@@ -30,9 +31,11 @@ https://github.com/danielsaidi/PresentationKit.git
 ```
 
 
+
 ## Supported Platforms
 
 PresentationKit supports iOS 17, tvOS 17, macOS 14, watchOS 10, and visionOS 1.
+
 
 
 ## Getting Started
@@ -111,9 +114,11 @@ PresentationKit also has an ``ErrorAlerter`` protocol that makes it easy to auto
 For more information regarding more complex presentation strategies and functionality not covered by this guide, please see the [getting-started guide][Getting-Started].
 
 
+
 ## Documentation
 
 The online [documentation][Documentation] has more information, articles, code examples, etc.
+
 
 
 ## Demo Application
@@ -121,9 +126,11 @@ The online [documentation][Documentation] has more information, articles, code e
 The `Demo` folder has a demo app that lets you explore the library.
 
 
+
 ## Support My Work
 
 You can [become a sponsor][Sponsors] to help me dedicate more time on my various [open-source tools][OpenSource]. Every contribution, no matter the size, makes a real difference in keeping these tools free and actively developed.
+
 
 
 ## Contact
@@ -134,6 +141,7 @@ Feel free to reach out if you have questions, or want to contribute in any way:
 * E-mail: [daniel.saidi@gmail.com][Email]
 * Bluesky: [@danielsaidi@bsky.social][Bluesky]
 * Mastodon: [@danielsaidi@mastodon.social][Mastodon]
+
 
 
 ## License
