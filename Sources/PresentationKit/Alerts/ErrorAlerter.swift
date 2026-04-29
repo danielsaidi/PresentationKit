@@ -11,9 +11,9 @@ import SwiftUI
 /// This protocol can be implemented by any type that can be
 /// used to present error alerts.
 ///
-/// Types that implement this protocol can use the extension
-/// ``tryWithErrorAlert(_:)`` to perform async functions and
-/// automatically alert any thrown error.
+/// Types that implement this protocol can perform any async
+/// operation with the varioys `tryWithErrorAlert` functions,
+/// to automatically alert any thrown errors.
 public protocol ErrorAlerter {
 
     /// The alert context to use to present errors.
@@ -31,8 +31,11 @@ public extension ErrorAlerter {
         errorAlertContext.present(error)
     }
 
-    /// Try to perform a throwing async operation, and alert any thrown error.
-    func tryWithErrorAlert(_ operation: @escaping AsyncOperation) {
+    /// Try to perform a throwing async operation, and alert
+    /// any thrown error.
+    func tryWithErrorAlert(
+        _ operation: @escaping AsyncOperation
+    ) {
         Task {
             do {
                 try await operation()
@@ -42,7 +45,8 @@ public extension ErrorAlerter {
         }
     }
 
-    /// Try to perform a throwing async operation, and alert any thrown error.
+    /// Try to perform a throwing async operation, and alert
+    /// any thrown error.
     func tryWithErrorAlert(
         _ operation: @escaping BlockOperation<Error>,
         completion: @escaping BlockCompletion<Error>

@@ -25,6 +25,7 @@ This version removes a lot of legacy protocols and models and makes the library 
 * `AnySheetContext` has been removed.
 * `AnyPresentation` has been removed.
 * `AlertContext` has been replaced with `PresentationContext`.
+* `ErrorAlertConvertible` has been renamed to `AlertError`.
 * `ModelPresentation` has been removed.
 * `FullScreenCoverContext` has been replaced with `PresentationContext`.
 * `SheetContext` has been replaced with `PresentationContext`.
