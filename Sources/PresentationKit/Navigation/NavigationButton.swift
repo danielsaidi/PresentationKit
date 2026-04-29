@@ -56,7 +56,8 @@ public struct NavigationButton<Content: View>: View {
                         Text("Button")
                     })
                 }
-            }.foregroundColor(.red)
+            }
+            .navigationChevronStyle(.init(font: .body.weight(.black), color: .red))
         }
     }
     

@@ -8,12 +8,14 @@ Until then, breaking changes can happen in any version, and deprecations may be 
 
 ## 1.0
 
-This version removes a lot of legacy protocols and models.
+This version removes a lot of legacy protocols and models and makes the library a lot cleaner.
 
 ### ✨ New Features
 
+* `NavigationButton` can be styled with `.navigationChevronStyle`.
+* `NavigationChevron` can be styled with `.navigationChevronStyle`.
+* `NavigationChevronStyle` is a new `NavigationChevron` style type.
 * `PresentationContext` is a new context that replaces the old ones.
-
 
 ### 💥 Breaking Changes
 
