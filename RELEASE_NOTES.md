@@ -16,6 +16,7 @@ This version removes a lot of legacy protocols and models and makes the library 
 * `NavigationChevron` can be styled with `.navigationChevronStyle`.
 * `NavigationChevronStyle` is a new `NavigationChevron` style type.
 * `PresentationContext` is a new context that replaces the old ones.
+* `View` has a couple of new `AlertError`-based alert view modifiers.
 
 ### 💥 Breaking Changes
 
