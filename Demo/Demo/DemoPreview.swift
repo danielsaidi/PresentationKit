@@ -1,27 +1,27 @@
+////
+////  DemoPreview.swift
+////  Demo
+////
+////  Created by Daniel Saidi on 2025-06-23.
+////  Copyright © 2025-2026 Daniel Saidi. All rights reserved.
+////
 //
-//  DemoPreview.swift
-//  Demo
+//import SwiftUI
 //
-//  Created by Daniel Saidi on 2025-06-23.
-//  Copyright © 2025-2026 Daniel Saidi. All rights reserved.
+///// This view is used to inject demo preview logic into each
+///// preview used in the demo.
+//struct DemoPreview<Content: View>: View {
 //
-
-import SwiftUI
-
-/// This view is used to inject demo preview logic into each
-/// preview used in the demo.
-struct DemoPreview<Content: View>: View {
-
-    init(
-        @ViewBuilder content: @escaping () -> Content
-    ) {
-        self.content = content
-    }
-
-    var content: () -> Content
-
-    var body: some View {
-        content()
-            .withDemoPresentation()
-    }
-}
+//    init(
+//        @ViewBuilder content: @escaping () -> Content
+//    ) {
+//        self.content = content
+//    }
+//
+//    var content: () -> Content
+//
+//    var body: some View {
+//        content()
+//            .withDemoPresentation()
+//    }
+//}

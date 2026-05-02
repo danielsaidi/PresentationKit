@@ -18,14 +18,14 @@ import SwiftUI
 /// used by the user to manually change the detents.
 public enum AnimatedPresentationDetent: Sendable, Equatable {
 
+    /// This detent makes the presentation fit the content.
+    case sizeToFit
+
     /// This detent maps to a native `.height` detent.
     case height(Double)
 
     /// This detent maps to a native `.fraction` detent.
     case fraction(Double)
-
-    /// This detent makes the presentation fit the content.
-    case sizeToFit
 }
 
 public extension AnimatedPresentationDetent {

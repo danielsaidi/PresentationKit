@@ -1,47 +1,47 @@
+////
+////  DemoError.swift
+////  Demo
+////
+////  Created by Daniel Saidi on 2025-06-19.
+////  Copyright © 2025-2026 Daniel Saidi. All rights reserved.
+////
 //
-//  DemoError.swift
-//  Demo
+//import PresentationKit
+//import SwiftUI
 //
-//  Created by Daniel Saidi on 2025-06-19.
-//  Copyright © 2025-2026 Daniel Saidi. All rights reserved.
+//enum DemoError: ErrorAlertConvertible, LocalizedError {
 //
-
-import PresentationKit
-import SwiftUI
-
-enum DemoError: ErrorAlertConvertible, LocalizedError {
-
-    case demoError, raw(Error)
-}
-
-extension DemoError {
-
-    var id: String {
-        switch self {
-        case .demoError: "demoError"
-        case .raw(let error): String(describing: error)
-        }
-    }
-
-    var alertTitle: String {
-        switch self {
-        case .demoError: "Demo Error"
-        case .raw: "Error"
-        }
-    }
-
-    var alertMessage: String {
-        errorDescription
-    }
-
-    var alertButtonText: String {
-        "OK"
-    }
-
-    var errorDescription: String {
-        switch self {
-        case .demoError: "This is a demo error."
-        case .raw(let error): String(describing: error)
-        }
-    }
-}
+//    case demoError, raw(Error)
+//}
+//
+//extension DemoError {
+//
+//    var id: String {
+//        switch self {
+//        case .demoError: "demoError"
+//        case .raw(let error): String(describing: error)
+//        }
+//    }
+//
+//    var alertTitle: String {
+//        switch self {
+//        case .demoError: "Demo Error"
+//        case .raw: "Error"
+//        }
+//    }
+//
+//    var alertMessage: String {
+//        errorDescription
+//    }
+//
+//    var alertButtonText: String {
+//        "OK"
+//    }
+//
+//    var errorDescription: String {
+//        switch self {
+//        case .demoError: "This is a demo error."
+//        case .raw(let error): String(describing: error)
+//        }
+//    }
+//}
