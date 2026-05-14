@@ -94,59 +94,51 @@ public extension View {
 
 #Preview {
 
-    @Previewable @State var alertContext = PresentationContext<PreviewModel>()
-    @Previewable @State var coverContext = PresentationContext<PreviewModel>()
-    @Previewable @State var sheetContext = PresentationContext<PreviewModel>()
+    return MyView()
 
-    VStack {
-        Button("Show Alert") {
-            alertContext.present(.init(text: "Hello, Alert!"))
-        }
-        #if !os(macOS)
-        Button("Show Cover") {
-            coverContext.present(.init(text: "Hello, Cover!"))
-        }
-        #endif
-        Button("Show Sheet") {
-            sheetContext.present(.init(text: "Hello, Sheet!"))
+    enum MyContent: String, @MainActor Identifiable, View {
+        case red, green, blue
+
+        var id: String { rawValue.capitalized }
+
+        var body: some View {
+            switch self {
+            case .red: Color.red
+            case .green: Color.green
+            case .blue: Color.blue
+            }
         }
     }
-    .frame(minWidth: 500, minHeight: 250)
-    .buttonStyle(.borderedProminent)
-    .alert(for: $alertContext) { item in
-        AlertMessage(title: item.text)
-    }
-    #if !os(macOS)
-    .fullScreenCover(for: $coverContext) { item in
-        PreviewModal(item: item)
-    }
-    #endif
-    .sheet(for: $sheetContext) { item in
-        PreviewModal(item: item)
-    }
-}
 
-private struct PreviewModal: View {
-    let item: PreviewModel
+    struct MyView: View {
 
-    @Environment(\.dismiss) var dismiss
+        @State var alertContext = PresentationContext<MyContent>()
+        @State var coverContext = PresentationContext<MyContent>()
+        @State var sheetContext = PresentationContext<MyContent>()
 
-    var body: some View {
-        NavigationStack {
-            Text(item.text)
-                .toolbar {
-                    ToolbarItem(placement: .confirmationAction) {
-                        Button("Close") {
-                            dismiss()
-                        }
-                    }
+        var body: some View {
+            List {
+                Button("Present Red Alert") {
+                    alertContext.present(.red)
                 }
+                Button("Present Green Cover") {
+                    coverContext.present(.green)
+                }
+                Button("Present Blue Sheet") {
+                    sheetContext.present(.blue)
+                }
+            }
+            .alert(for: $alertContext) { content in
+                AlertMessage(title: content.id)
+            }
+            #if !os(macOS)
+            .fullScreenCover(for: $coverContext) { content in
+                content
+            }
+            #endif
+            .sheet(for: $sheetContext) { content in
+                content
+            }
         }
-        .presentationDetents([.medium, .large])
     }
-}
-
-private struct PreviewModel: Identifiable {
-    var id: String { text }
-    let text: String
 }

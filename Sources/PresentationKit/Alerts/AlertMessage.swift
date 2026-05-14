@@ -13,8 +13,8 @@ public struct AlertMessage<Actions: View, Message: View> {
 
     public init(
         title: LocalizedStringKey,
-        @ViewBuilder actions: @escaping () -> Actions,
-        @ViewBuilder message: @escaping () -> Message
+        @ViewBuilder message: @escaping () -> Message,
+        @ViewBuilder actions: @escaping () -> Actions
     ) {
         self.title = title
         self.actions = actions
@@ -28,8 +28,8 @@ public struct AlertMessage<Actions: View, Message: View> {
     ) {
         self.init(
             title: LocalizedStringKey(stringLiteral: title),
-            actions: actions,
-            message: message
+            message: message,
+            actions: actions
         )
     }
 
@@ -38,13 +38,40 @@ public struct AlertMessage<Actions: View, Message: View> {
     public var message: () -> Message
 }
 
+public extension AlertMessage where Actions == AnyView, Message == AnyView {
+
+    init<A: View, M: View>(
+        title: LocalizedStringKey,
+        @ViewBuilder message: @escaping () -> M,
+        @ViewBuilder actions: @escaping () -> A
+    ) {
+        self.init(
+            title: title,
+            message: { AnyView(message()) },
+            actions: { AnyView(actions()) }
+        )
+    }
+
+    init<A: View, M: View>(
+        title: String,
+        @ViewBuilder message: @escaping () -> M,
+        @ViewBuilder actions: @escaping () -> A
+    ) {
+        self.init(
+            title: LocalizedStringKey(stringLiteral: title),
+            message: message,
+            actions: actions
+        )
+    }
+}
+
 public extension AlertMessage where Actions == Button<Text>, Message == EmptyView {
 
     init(title: LocalizedStringKey) {
         self.init(
             title: title,
-            actions: { Button("OK") {} },
-            message: { EmptyView() }
+            message: { EmptyView() },
+            actions: { Button("OK") {} }
         )
     }
 
@@ -61,8 +88,8 @@ public extension AlertMessage where Message == EmptyView {
     ) {
         self.init(
             title: title,
-            actions: actions,
-            message: { EmptyView() }
+            message: { EmptyView() },
+            actions: actions
         )
     }
 
@@ -85,8 +112,8 @@ public extension AlertMessage where Actions == Button<Text> {
     ) {
         self.init(
             title: title,
-            actions: { Button("OK") {} },
-            message: message
+            message: message,
+            actions: { Button("OK") {} }
         )
     }
 

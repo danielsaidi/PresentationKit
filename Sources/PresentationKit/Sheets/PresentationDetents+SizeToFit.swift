@@ -12,19 +12,17 @@ public extension View {
 
     /// Sets the sheet detent to fit its content height.
     func presentationDetents(
-        _ detent: PresentationDetent.SizeToFit,
+        _ detent: SizeToFitPresentationDetent,
         additional: Set<PresentationDetent> = []
     ) -> some View {
         modifier(SizeToFitModifier(additional: additional))
     }
 }
 
-public extension PresentationDetent {
-
-    /// A detent type that causes a sheet to fit its content.
-    enum SizeToFit {
-        case sizeToFit
-    }
+/// This detent type causess a sheet to fit its content.
+public enum SizeToFitPresentationDetent {
+    
+    case sizeToFit
 }
 
 /// This private view modifier takes care of the size to fit.
@@ -47,9 +45,9 @@ private struct SizeToFitModifier: ViewModifier {
 
 #Preview {
 
-    return Preview()
+    return MyView()
 
-    struct Preview: View {
+    struct MyView: View {
 
         @State var isPresented = true
 
@@ -58,13 +56,16 @@ private struct SizeToFitModifier: ViewModifier {
                 isPresented.toggle()
             }
             .sheet(isPresented: $isPresented) {
-                PreviewSheet()
-                    .presentationDetents(.sizeToFit, additional: [.medium])
+                MySheet()
+                    .presentationDetents(
+                        .sizeToFit,
+                        additional: [.medium, .large]
+                    )
             }
         }
     }
 
-    struct PreviewSheet: View {
+    struct MySheet: View {
 
         @State var isExpanded = false
 

@@ -22,7 +22,7 @@ import SwiftUI
 public protocol ErrorAlerter {
 
     /// The alert context to use to present errors.
-    var errorAlertContext: PresentationContext<Error> { get }
+    var errorContext: PresentationContext<Error> { get }
 }
 
 @MainActor
@@ -30,7 +30,7 @@ public extension ErrorAlerter {
 
     /// Alert an error error.
     func alert(error: Error) {
-        errorAlertContext.present(error)
+        errorContext.present(error)
     }
 
     /// Try to perform a throwing async operation, and alert
@@ -76,4 +76,53 @@ public extension ErrorAlerter {
 
     /// This typealias describes a block operation.
     typealias BlockOperation<ErrorType: Error> = (BlockCompletion<ErrorType>) -> Void
+}
+
+#Preview {
+
+    return MyView()
+
+    enum MyError: String, AlertableError {
+        case minor, major
+
+        var id: String { rawValue }
+
+        var alertMessage: AlertMessage<AnyView, AnyView> {
+            AlertMessage(
+                title: "A \(rawValue) error occured",
+                message: { Text("Please try again.") },
+                actions: { Button("OK", action: {}) }
+            )
+        }
+    }
+
+    struct MyView: View, @MainActor ErrorAlerter {
+
+        @State var errorContext = PresentationContext<Error>()
+
+        func simulateOperation(error: Error?) async throws {
+            if let error { throw error }
+        }
+
+        var body: some View {
+            List {
+                Button("Perform a successful operation") {
+                    tryWithErrorAlert {
+                        try await simulateOperation(error: nil)
+                    }
+                }
+                Button("Perform a minor failing operation") {
+                    tryWithErrorAlert {
+                        try await simulateOperation(error: MyError.minor)
+                    }
+                }
+                Button("Perform a major failing operation") {
+                    tryWithErrorAlert {
+                        try await simulateOperation(error: MyError.major)
+                    }
+                }
+            }
+            .alert(for: $errorContext)
+        }
+    }
 }

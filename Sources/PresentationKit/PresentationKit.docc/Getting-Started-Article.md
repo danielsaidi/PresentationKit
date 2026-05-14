@@ -2,143 +2,234 @@
 
 This article describes how to get started with PresentationKit.
 
-PresentationKit makes it easy to present any type in alerts, full screen covers and sheets, using the observable ``AlertContext``, ``FullScreenCoverContext``, and ``SheetContext`` classes.
+PresentationKit makes it easy to present alerts, sheets, and modals for any identifiable model, using a ``PresentationContext``. The library also has additional utilities for alerts, errors, navigation, and sheets.
 
-All we have to do to be able to present a type, is to apply a presentation modifier to the application root for the type we want to present:
+
+## PresentationContext
+
+The observable ``PresentationContext`` class makes it easy to present alerts, sheets, and modals in the same way, in a single way.
+
+To use it, just create a context instance and bind it to your view with the context-specific ``SwiftUICore/View/alert(for:content:)``, ``SwiftUICore/View/sheet(for:onDismiss:content:)`` and ``SwiftUICore/View/fullScreenCover(for:onDismiss:content:)`` view modifiers.
 
 ```swift
-@main
-struct MyApp: App {
+enum MyContent: String, @MainActor Identifiable, View {
+    case red, green, blue
 
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
-                .presentation(
-                    for: MyModel.self,
-                    alertContent: { value in
-                        AlertContent(
-                            title: "Alert",
-                            actions: {
-                                Button("OK", action: { print("OK for item #\(value.id)") })
-                                Button("Cancel", role: .cancel, action: {})
-                            },
-                            message: { Text("Alert for item #\(value.id)") }
-                        )
-                    },
-                    coverContent: { 
-                        MyModelView(value: $0, title: "Cover") 
-                    },
-                    sheetContent: { 
-                        MyModelView(value: $0, title: "Sheet")
-                    }
+    var id: String { rawValue.capitalized }
+
+    var body: some View {
+        switch self {
+        case .red: Color.red
+        case .green: Color.green
+        case .blue: Color.blue
+        }
+    }
+}
+
+struct MyView: View {
+
+    @State var alertContext = PresentationContext<MyContent>()
+    @State var coverContext = PresentationContext<MyContent>()
+    @State var sheetContext = PresentationContext<MyContent>()
+
+    var body: some View {
+        List {
+            Button("Present Red Alert") {
+                alertContext.present(.red)
+            }
+            Button("Present Green Cover") {
+                coverContext.present(.green)
+            }
+            Button("Present Blue Sheet") {
+                sheetContext.present(.blue)
+            }
+        }
+        .alert(for: $alertContext) { content in
+            AlertMessage(title: content.id)
+        }
+        #if !os(macOS)
+        .fullScreenCover(for: $coverContext) { content in
+            content
+        }
+        #endif
+        .sheet(for: $sheetContext) { content in
+            content
+        }
+    }
+}
+```
+
+As you can see above, the alert modifier must return an ``AlertMessage`` while the cover and sheet modifiers can return regular views. 
+
+
+## Alerts
+
+PresentationKit makes it easy to perform async throwing operations, and automatically alert any errors that are thrown during execution.
+
+Any type that implements ``ErrorAlerter`` can perform throwing async operations with automatic error alerts. If an error conforms to the ``AlertableError`` protocol, the ``SwiftUICore/View/alert(for:)`` modifier will automatically map it to an ``AlertMessage``.
+
+```swift
+enum MyError: String, AlertableError {
+    case minor, major
+
+    var id: String { rawValue }
+
+    var alertMessage: AlertMessage<AnyView, AnyView> {
+        AlertMessage(
+            title: "A \(rawValue) error occured",
+            message: { Text("Please try again") },
+            actions: { Button("OK", action: {}) }
+        )
+    }
+}
+
+struct MyView: View, @MainActor ErrorAlerter {
+
+    @State var errorContext = PresentationContext<Error>()
+
+    func simulateOperation(error: Error?) async throws {
+        if let error { throw error }
+    }
+
+    var body: some View {
+        List {
+            Button("Perform a successful operation") {
+                tryWithErrorAlert {
+                    try await simulateOperation(error: nil)
+                }
+            }
+            Button("Perform a minor failing operation") {
+                tryWithErrorAlert {
+                    try await simulateOperation(error: MyError.minor)
+                }
+            }
+            Button("Perform a major failing operation") {
+                tryWithErrorAlert {
+                    try await simulateOperation(error: MyError.major)
+                }
+            }
+        }
+        .alert(for: $errorContext)
+    }
+}
+```
+
+The alert modifier we use here doesn't need to define an alert content builder, since the error is automatically converted to a message.
+
+
+## Sheets
+
+PresentationKit makes it easy to present sheets that automatically animate any size changes, and that resize to fit their content views.
+
+### Animated Size Changes
+
+You can use the ``SwiftUICore/View/presentationDetents(animated:manual:)`` view modifier to make a sheet animate its size when the content size or the animated detent changes, with additional manual detents that the user can apply by dragging the sheet handle:
+
+```swift
+struct MyView: View {
+
+    @State var isPresented = true
+    @State var size: AnimatedPresentationDetent = .sizeToFit
+
+    var body: some View {
+        Button("Present Sheet") {
+            isPresented.toggle()
+        }
+        .sheet(isPresented: $isPresented) {
+            MySheet(size: $size)
+                .presentationDetents(
+                    animated: size,
+                    manual: [.medium, .large]
                 )
         }
     }
 }
-```
 
-You can omit any builder that you're not going to use. For instance, you don't have to provide an alert content if you won't alert the type.
+struct MySheet: View {
 
-The presentation will inject presentation contexts into the environment, which we can use to present values from anywhere in the app:
+    @Binding var size: AnimatedPresentationDetent
 
-```swift
-struct ContentView: View {
-
-    @Environment(AlertContext<Model>.self) private var alert
-    @Environment(FullScreenCoverContext<Model>.self) private var cover
-    @Environment(SheetContext<Model>.self) private var sheet
-
-    private let value = Model(id: 1)
+    @State var isExpanded = false
 
     var body: some View {
-        NavigationStack {
-            List {
-                Button("Present an alert") {
-                    alert.present(value)
+        VStack(spacing: 16) {
+            Text("Sheet Title")
+                .font(.title.bold())
+
+            Text("Sheet Text")
+
+            if isExpanded {
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(.blue)
+                    .frame(height: 200)
+            }
+
+            HStack {
+                Button("Toggle Size") {
+                    size = size == .sizeToFit ? .fraction(0.5) : .sizeToFit
                 }
-                Button("Present a full screen cover") {
-                    cover.present(value)
-                }
-                Button("Present a sheet") {
-                    sheet.present(value)
+                Button("Toggle Content") {
+                    isExpanded.toggle()
                 }
             }
-            .navigationTitle("Demo")
+            .buttonStyle(.borderedProminent)
         }
+        .padding()
     }
 }
 ```
 
-PresentationKit will create and inject new contexts for new modals. This means that we only have to specify our presentation strategy *once*, after which the same presentations will work in the entire app.
-
-> Important: When using multiple presentation modifiers, we must apply the presentation strategy to our modals as well, since we will otherwise not get all the contexts injected. See the demo for an example on how we can do this automatically. 
+The ``AnimatedPresentationDetent`` enum has a ``AnimatedPresentationDetent/sizeToFit`` detent, as well as a ``AnimatedPresentationDetent/fraction(_:)`` and a ``AnimatedPresentationDetent/height(_:)`` variant, with ``AnimatedPresentationDetent/small``, ``AnimatedPresentationDetent/medium``, and ``AnimatedPresentationDetent/large`` values that approximate the system defaults. 
 
 
+### Size to fit
 
-## Going Further
-
-### Legacy Presentation Contexts
-
-PresentationKit has ``AnyPresentationContext`` types that are kept for legacy purposes. Thes contexts make it possible to present alerts and views via injected contexts. This is a lot more flexible, but doesn't use the item presentation approach of modern SwiftUI.
-
-You can use the ``AnyAlertContext``, ``AnyFullScreenCoverContext``, and ``AnySheetContext`` and their related view modifiers, but this part of the library may be removed in a future update.
-
-
-### Multi-Window Apps & Focus Values
-
-Multi-windowed apps must be able to keep track of the contexts that belong to the current window, so that the correct values are used.
-
-While the ``AnyPresentationContext`` contexts have focused values, you must create specific focused values for the generic ones:
+You can use the ``SwiftUICore/View/presentationDetents(_:additional:)`` view modifier to make a sheet fit its content, with additional standard detents that the user can apply by dragging the sheet handle:
 
 ```swift
-struct MyModel: Identifiable { ... }
+struct MyView: View {
 
-extension FocusedValues {
-
-    @Entry var myModelAlertContext: AlertContext<MyModel>?
-    @Entry var myModelCoverContext: FullScreenCoverContext<MyModel>?
-    @Entry var myModelSheetContext: SheetContext<MyModel>?
-}
-```
-
-You can then register the currently focused context from your current window, using the `.focusedValue(...)` view modifier: 
-
-```swift
-struct ContentView: View {
-
-    @Environment(\.myModelAlertContext) var alert
-    @Environment(\.myModelCoverContext) var cover
-    @Environment(\.myModelSheetContext) var sheet
+    @State var isPresented = true
 
     var body: some View {
-        VStack {
-            ...
+        Button("Present Sheet") {
+            isPresented.toggle()
         }
-        .focusedValue(\.myModelAlertContext, alert)
-        .focusedValue(\.myModelCoverContext, cover)
-        .focusedValue(\.myModelSheetContext, sheet)
+        .sheet(isPresented: $isPresented) {
+            MySheet()
+                .presentationDetents(
+                    .sizeToFit,
+                    additional: [.medium, .large]
+                )
+        }
+    }
+}
+
+struct MySheet: View {
+
+    @State var isExpanded = false
+
+    var body: some View {
+        VStack(spacing: 16) {
+            Text("Sheet Title")
+                .font(.title.bold())
+
+            Text("Sheet Text")
+
+            if isExpanded {
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(.blue)
+                    .frame(height: 200)
+            }
+
+            Button("Toggle Content") {
+                isExpanded.toggle()
+            }
+            .buttonStyle(.borderedProminent)
+        }
+        .padding()
     }
 }
 ```
 
-You can then use `@FocusedValue` to access the currently focused values from a command or the main menu:
-
-```swift
-@FocusedValue(\.myModelAlertContext) var alert
-@FocusedValue(\.myModelCoverContext) var cover
-@FocusedValue(\.myModelSheetContext) var sheet
-```
-
-By using typed focus values, you can inject as many contexts as you like and use each value to access the correct context.
-
-
-### Automatic Error Alerting for Failing Operations
-
-PresentationKit has an ``ErrorAlerter`` protocol that makes it easy to automatically present error alerts, for instance when a SwiftUI triggers an asynchronous operation that fails.
-
-To use the ``ErrorAlerter`` protocol, just let your view or model implement it, then use any ``ErrorAlerter/tryWithErrorAlert(_:)`` function to trigger an asynchronous operation that will automatically alert any errors that are thrown.
-
-
-### Navigation Utilities
-
-PresentationKit has a ``NavigationContext`` that can be used to observe a navigation path, as well as a ``NavigationButton`` that can be used to trigger a navigation with a button instead of a NavigationLink.
+Note that this modifier uses standard system detents under the hood, which means that any size changes are not animated. Use this to present sheets that will not change size.

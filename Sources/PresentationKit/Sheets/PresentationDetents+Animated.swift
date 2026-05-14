@@ -127,9 +127,9 @@ private struct PresentationDetentsSelectionModifier: ViewModifier {
 
 #Preview {
 
-    return Preview()
+    return MyView()
 
-    struct Preview: View {
+    struct MyView: View {
 
         @State var isPresented = true
         @State var size: AnimatedPresentationDetent = .sizeToFit
@@ -139,7 +139,7 @@ private struct PresentationDetentsSelectionModifier: ViewModifier {
                 isPresented.toggle()
             }
             .sheet(isPresented: $isPresented) {
-                PreviewSheet(size: $size)
+                MySheet(size: $size)
                     .presentationDetents(
                         animated: size,
                         manual: [.medium, .large]
@@ -148,7 +148,7 @@ private struct PresentationDetentsSelectionModifier: ViewModifier {
         }
     }
 
-    struct PreviewSheet: View {
+    struct MySheet: View {
 
         @Binding var size: AnimatedPresentationDetent
 

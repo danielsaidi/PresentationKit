@@ -17,25 +17,8 @@ import SwiftUI
 /// while other errors will alert the localized description.
 public protocol AlertableError: Error {
 
-    associatedtype Actions: View
-    associatedtype Message: View
-
     /// The alert message to display.
-    var alertMessage: AlertMessage<Actions, Message> { get }
-}
-
-extension AlertableError {
-
-    /// Convert the ``alertMessage`` to a type-erased one to
-    /// work around generics constraints.
-    var typeErasedAlertMessage: AlertMessage<AnyView, AnyView> {
-        let message = alertMessage
-        return AlertMessage(
-            title: message.title,
-            actions: { AnyView(message.actions()) },
-            message: { AnyView(message.message()) }
-        )
-    }
+    var alertMessage: AlertMessage<AnyView, AnyView> { get }
 }
 
 // MARK: - View Extensions
@@ -65,7 +48,7 @@ public extension View {
 
     func alertTitle(for item: (any Error)?) -> LocalizedStringKey {
         if let alertError = item as? any AlertableError {
-            return alertError.typeErasedAlertMessage.title
+            return alertError.alertMessage.title
         }
         return "Error"
     }
@@ -73,7 +56,7 @@ public extension View {
     @ViewBuilder
     func alertActions(for item: any Error) -> some View {
         if let alertError = item as? any AlertableError {
-            AnyView(alertError.typeErasedAlertMessage.actions())
+            alertError.alertMessage.actions()
         } else {
             Button("OK") {}
         }
@@ -82,7 +65,7 @@ public extension View {
     @ViewBuilder
     func alertMessage(for item: any Error) -> some View {
         if let alertError = item as? any AlertableError {
-            AnyView(alertError.typeErasedAlertMessage.message())
+            alertError.alertMessage.message()
         } else {
             Text(item.localizedDescription)
         }

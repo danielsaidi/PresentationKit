@@ -6,9 +6,9 @@ A SwiftUI library that makes it easy to present alerts and modal content.
 
 ![Library logotype](Logo.png)
 
-PresentationKit is a SwiftUI library that makes it easy to present alerts, sheets, and full screen covers for any identifiable model, by using observable ``AlertContext``, ``FullScreenCoverContext``, and ``SheetContext`` classes.
+PresentationKit is a SwiftUI library that makes it easy to present alerts, sheets, and full screen covers for any identifiable model, by using an observable ``PresentationContext``.
 
-PresentationKit lets you register a presentation strategy for any identifiable model, and will create and inject unique context values into the environment for each modal layer. This lets you use the current contexts to present new content from any view.
+PresentationKit also has utilities to manage alerts, errors, and navigation, and makes it easy to make a sheet size to fit its content, and to animate the sheet smoothly whenever its size changes.
 
 
 
@@ -25,12 +25,6 @@ https://github.com/danielsaidi/PresentationKit.git
 ## Supported Platforms
 
 PresentationKit supports iOS 17, tvOS 17, macOS 14, watchOS 10, and visionOS 1.
-
-
-
-## Support My Work
-
-You can [become a sponsor][Sponsors] to help me dedicate more time on my various [open-source tools][OpenSource]. Every contribution, no matter the size, makes a real difference in keeping these tools free and actively developed.
 
 
 
@@ -52,6 +46,12 @@ For more information, source code, etc., visit the [project repository][Project]
 
 
 
+## Support My Work
+
+You can [become a sponsor][Sponsors] to help me dedicate more time on my various [open-source tools][OpenSource]. Every contribution, no matter the size, makes a real difference in keeping these tools free and actively developed.
+
+
+
 ## License
 
 PresentationKit is available under the MIT license.
@@ -64,24 +64,27 @@ PresentationKit is available under the MIT license.
 
 - <doc:Getting-Started-Article>
 
-### Essentials
+### Alerts
 
-- ``AlertContext``
-- ``AlertContent``
-- ``FullScreenCoverContext``
-- ``SheetContext``
-- ``ModelPresentation``
-
-### Errors
-
+- ``AlertableError``
+- ``AlertMessage``
 - ``ErrorAlerter``
-- ``ErrorAlertConvertible``
 
 ### Navigation
 
 - ``NavigationButton``
 - ``NavigationChevron``
+- ``NavigationChevronStyle``
 - ``NavigationContext``
+
+### Presentation
+
+- ``PresentationContext``
+
+### Sheets
+
+- ``AnimatedPresentationDetent``
+- ``SizeToFitPresentationDetent``
 
 
 
