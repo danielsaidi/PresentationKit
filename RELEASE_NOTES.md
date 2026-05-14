@@ -8,7 +8,7 @@ Until then, breaking changes can happen in any version, and deprecations may be 
 
 ## 1.0
 
-This version removes a lot of legacy protocols and models and makes the library a lot cleaner.
+This version removes a lot of legacy protocols and models and makes the library cleaner.
 
 ### ✨ New Features
 
@@ -16,7 +16,9 @@ This version removes a lot of legacy protocols and models and makes the library 
 * `NavigationChevron` can be styled with `.navigationChevronStyle`.
 * `NavigationChevronStyle` is a new `NavigationChevron` style type.
 * `PresentationContext` is a new context that replaces the old ones.
-* `View` has a couple of new `AlertError`-based alert view modifiers.
+* `View` has new `.alert`, `.fullScreenCover`, and `.sheet` modifiers for the context.
+* `View` has a new `.presentationDetents(_:additional:) modifier for intrinsic sizing.
+* `View` has a new `.presentationDetents(animated:manual:) modifier for animated resizing.
 
 ### 💥 Breaking Changes
 
