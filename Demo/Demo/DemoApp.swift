@@ -12,23 +12,9 @@ import SwiftUI
 @main
 struct DemoApp: App {
 
-//    @FocusedValue(\.demoModelAlertContext) var menuAlert
-//    @FocusedValue(\.demoModelCoverContext) var menuCover
-//    @FocusedValue(\.demoModelSheetContext) var menuSheet
-
     var body: some Scene {
         WindowGroup {
             ContentView()
-//                .withDemoPresentation()
         }
-//        .commands {
-//            CommandMenu("Menu.Demo") {
-//                DemoPresentationActions(
-//                    alert: menuAlert,
-//                    cover: menuCover,
-//                    sheet: menuSheet
-//                )
-//            }
-//        }
     }
 }
