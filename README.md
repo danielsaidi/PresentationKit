@@ -15,7 +15,7 @@
 PresentationKit is a SwiftUI library that makes it easy to present alerts, sheets, and full screen covers for any model, by using an observable ``PresentationContext``.
 
 <p align="center">
-    <img src="https://github.com/danielsaidi/PresentationKit/releases/download/1.0.0/Demo.gif" alt="Demo Gif" />
+    <img src="https://github.com/danielsaidi/PresentationKit/releases/download/1.0.0/Demo.gif" alt="Demo Gif" width=1500 />
 </p>
 
 PresentationKit also has utilities to manage alerts, errors, and navigation, and makes it easy to make a sheet size to fit its content, and to animate the sheet smoothly whenever its size changes. 
