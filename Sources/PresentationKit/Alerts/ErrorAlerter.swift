@@ -14,6 +14,11 @@ import SwiftUI
 /// Types that implement this protocol can perform any async
 /// operation with the varioys `tryWithErrorAlert` functions,
 /// to automatically alert any thrown errors.
+///
+/// When an ``ErrorAlerter`` type alerts an ``AlertableError``
+/// using the ``SwiftUICore/View/alert(for:)`` modifier, the
+/// ``AlertableError/alertMessage`` is automatically alerted,
+/// while other errors will alert the localized description.
 public protocol ErrorAlerter {
 
     /// The alert context to use to present errors.
@@ -24,10 +29,7 @@ public protocol ErrorAlerter {
 public extension ErrorAlerter {
 
     /// Alert an error error.
-    func alert(
-        error: Error,
-        okButtonText: String = "OK"
-    ) {
+    func alert(error: Error) {
         errorAlertContext.present(error)
     }
 

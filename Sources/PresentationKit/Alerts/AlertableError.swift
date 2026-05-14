@@ -1,5 +1,5 @@
 //
-//  AlertError.swift
+//  AlertableError.swift
 //  PresentationKit
 //
 //  Created by Daniel Saidi on 2025-06-23.
@@ -8,9 +8,14 @@
 
 import SwiftUI
 
-/// This protocol can be implemented by any type that can be
-/// used to create an ``AlertMessage``.
-public protocol AlertError: Error {
+/// This protocol can be implemented by all error types that
+/// can be used to generate an ``AlertMessage``.
+///
+/// When an ``ErrorAlerter`` type alerts an ``AlertableError``
+/// using the ``SwiftUICore/View/alert(for:)`` modifier, the
+/// ``AlertableError/alertMessage`` is automatically alerted,
+/// while other errors will alert the localized description.
+public protocol AlertableError: Error {
 
     associatedtype Actions: View
     associatedtype Message: View
@@ -19,8 +24,10 @@ public protocol AlertError: Error {
     var alertMessage: AlertMessage<Actions, Message> { get }
 }
 
-extension AlertError {
+extension AlertableError {
 
+    /// Convert the ``alertMessage`` to a type-erased one to
+    /// work around generics constraints.
     var typeErasedAlertMessage: AlertMessage<AnyView, AnyView> {
         let message = alertMessage
         return AlertMessage(
@@ -57,7 +64,7 @@ public extension View {
     }
 
     func alertTitle(for item: (any Error)?) -> LocalizedStringKey {
-        if let alertError = item as? any AlertError {
+        if let alertError = item as? any AlertableError {
             return alertError.typeErasedAlertMessage.title
         }
         return "Error"
@@ -65,7 +72,7 @@ public extension View {
 
     @ViewBuilder
     func alertActions(for item: any Error) -> some View {
-        if let alertError = item as? any AlertError {
+        if let alertError = item as? any AlertableError {
             AnyView(alertError.typeErasedAlertMessage.actions())
         } else {
             Button("OK") {}
@@ -74,7 +81,7 @@ public extension View {
 
     @ViewBuilder
     func alertMessage(for item: any Error) -> some View {
-        if let alertError = item as? any AlertError {
+        if let alertError = item as? any AlertableError {
             AnyView(alertError.typeErasedAlertMessage.message())
         } else {
             Text(item.localizedDescription)

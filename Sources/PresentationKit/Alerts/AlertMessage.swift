@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-/// This type can be used to define an alert message.
+/// This type can be used to define an alert.
 public struct AlertMessage<Actions: View, Message: View> {
 
     public init(
