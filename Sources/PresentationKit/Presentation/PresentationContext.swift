@@ -50,9 +50,9 @@ public extension View {
     ///
     /// The ``AlertMessage`` struct has several mutations to
     /// let you create different kinds of messages.
-    func alert<Item: Identifiable, Actions: View, Message: View>(
+    func alert<Item: Identifiable>(
         for context: Binding<PresentationContext<Item>>,
-        content: @escaping (Item) -> AlertMessage<Actions, Message>
+        content: @escaping (Item) -> AlertMessage
     ) -> some View {
         self.alert(
             context.wrappedValue.item.map(content)?.title ?? "",
@@ -134,7 +134,14 @@ public extension View {
                 }
             }
             .alert(for: $alertContext) { content in
-                AlertMessage(title: content.id)
+                AlertMessage(
+                    title: LocalizedStringResource(stringLiteral: content.id),
+                    message: { EmptyView() },
+                    actions: {
+                        Button("Cancel", role: .cancel) {}
+                        Button("OK", role: .none) {}
+                    }
+                )
             }
             #if !os(macOS)
             .fullScreenCover(for: $coverContext) { content in

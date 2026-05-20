@@ -9,106 +9,60 @@
 import SwiftUI
 
 /// This type can be used to define an alert.
-public struct AlertMessage<Actions: View, Message: View> {
+public struct AlertMessage {
 
     public init(
-        title: LocalizedStringKey,
-        @ViewBuilder message: @escaping () -> Message,
-        @ViewBuilder actions: @escaping () -> Actions
+        title: LocalizedStringResource,
+        @ViewBuilder message: @escaping () -> some View,
+        @ViewBuilder actions: @escaping () -> some View
+    ) {
+        self.title = String(localized: title)
+        self.message = { AnyView(message()) }
+        self.actions = { AnyView(actions()) }
+    }
+
+    public init(
+        title: String,
+        @ViewBuilder message: @escaping () -> some View,
+        @ViewBuilder actions: @escaping () -> some View
     ) {
         self.title = title
-        self.actions = actions
-        self.message = message
+        self.message = { AnyView(message()) }
+        self.actions = { AnyView(actions()) }
     }
 
-    public init(
-        title: String,
-        @ViewBuilder actions: @escaping () -> Actions,
-        @ViewBuilder message: @escaping () -> Message
-    ) {
-        self.init(
-            title: LocalizedStringKey(stringLiteral: title),
-            message: message,
-            actions: actions
-        )
-    }
-
-    public var title: LocalizedStringKey
-    public var actions: () -> Actions
-    public var message: () -> Message
+    public var title: String
+    public var actions: () -> AnyView
+    public var message: () -> AnyView
 }
 
-public extension AlertMessage where Actions == AnyView, Message == AnyView {
+public extension AlertMessage {
 
-    init<A: View, M: View>(
-        title: LocalizedStringKey,
-        @ViewBuilder message: @escaping () -> M,
-        @ViewBuilder actions: @escaping () -> A
-    ) {
-        self.init(
-            title: title,
-            message: { AnyView(message()) },
-            actions: { AnyView(actions()) }
-        )
-    }
-
-    init<A: View, M: View>(
-        title: String,
-        @ViewBuilder message: @escaping () -> M,
-        @ViewBuilder actions: @escaping () -> A
-    ) {
-        self.init(
-            title: LocalizedStringKey(stringLiteral: title),
-            message: message,
-            actions: actions
-        )
-    }
-}
-
-public extension AlertMessage where Actions == Button<Text>, Message == EmptyView {
-
-    init(title: LocalizedStringKey) {
-        self.init(
-            title: title,
-            message: { EmptyView() },
-            actions: { Button("OK") {} }
-        )
+    init(title: LocalizedStringResource) {
+        self.init(title: String(localized: title))
     }
 
     init(title: String) {
-        self.init(title: LocalizedStringKey(stringLiteral: title))
-    }
-}
-
-public extension AlertMessage where Message == EmptyView {
-
-    init(
-        title: LocalizedStringKey,
-        @ViewBuilder actions: @escaping () -> Actions
-    ) {
         self.init(
             title: title,
             message: { EmptyView() },
-            actions: actions
+            actions: { EmptyView() }
+        )
+    }
+
+    init(
+        title: LocalizedStringResource,
+        @ViewBuilder message: @escaping () -> some View
+    ) {
+        self.init(
+            title: String(localized: title),
+            message: message
         )
     }
 
     init(
         title: String,
-        @ViewBuilder actions: @escaping () -> Actions
-    ) {
-        self.init(
-            title: LocalizedStringKey(stringLiteral: title),
-            actions: actions
-        )
-    }
-}
-
-public extension AlertMessage where Actions == Button<Text> {
-
-    init(
-        title: LocalizedStringKey,
-        @ViewBuilder message: @escaping () -> Message
+        @ViewBuilder message: @escaping () -> some View
     ) {
         self.init(
             title: title,
@@ -118,12 +72,23 @@ public extension AlertMessage where Actions == Button<Text> {
     }
 
     init(
-        title: String,
-        @ViewBuilder message: @escaping () -> Message
+        title: LocalizedStringResource,
+        @ViewBuilder actions: @escaping () -> some View
     ) {
         self.init(
-            title: LocalizedStringKey(stringLiteral: title),
-            message: message
+            title: String(localized: title),
+            actions: actions
+        )
+    }
+
+    init(
+        title: String,
+        @ViewBuilder actions: @escaping () -> some View
+    ) {
+        self.init(
+            title: title,
+            message: { EmptyView() },
+            actions: actions
         )
     }
 }

@@ -1,18 +1,27 @@
 # Release Notes
 
-[PresentationKit](https://github.com/danielsaidi/PresentationKit) will use semver after 1.0.
+[PresentationKit](https://github.com/danielsaidi/PresentationKit) uses semantic versioning, with the following strategy:
 
-Until then, breaking changes can happen in any version, and deprecations may be removed in any minor version bump.
+* Deprecations can happen at any time.
+* Deprecations are removed in `major` updates.
+* Breaking changes should only occur in `major` updates.
+* Breaking changes *can* occur in `minor` and `patch` updates, if the alternative is worse.
+
+Beta version tags are removed after the next minor or major version. 
+
+These release notes only cover the current major version.
 
 
 
-## 1.0.1
+## 1.1
 
-This version adds a dismiss function to the navigation context.
+This version simplifies the `AlertMessage` to be non-generic.
 
-### ✨ New Features
+This is a breaking change, but the alternative was worse, after running into problems.
 
-* `NavigationContext` has a new `dismiss` function.
+### 💡 Adjustments
+
+* `AlertMessage` is non-generic and supports `String` and `LocalizedStringResource` instead of `LocalizedStringKey`.
 
 
 

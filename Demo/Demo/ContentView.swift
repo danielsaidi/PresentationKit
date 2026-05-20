@@ -145,11 +145,14 @@ enum DemoError: String, AlertableError {
 
     var id: String { rawValue }
 
-    var alertMessage: AlertMessage<AnyView, AnyView> {
+    var alertMessage: AlertMessage {
         AlertMessage(
             title: "A \(rawValue) error occured",
             message: { Text("Please try again.") },
-            actions: { Button("OK", action: {}) }
+            actions: {
+                Button("Cancel", role: .cancel, action: {})
+                Button("OK", action: {})
+            }
         )
     }
 }

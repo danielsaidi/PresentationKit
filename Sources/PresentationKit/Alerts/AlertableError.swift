@@ -18,7 +18,7 @@ import SwiftUI
 public protocol AlertableError: Error {
 
     /// The alert message to display.
-    var alertMessage: AlertMessage<AnyView, AnyView> { get }
+    var alertMessage: AlertMessage { get }
 }
 
 // MARK: - View Extensions
@@ -49,7 +49,7 @@ public extension View {
 
 private extension View {
 
-    func alertTitle(for item: (any Error)?) -> LocalizedStringKey {
+    func alertTitle(for item: (any Error)?) -> String {
         if let alertError = item as? any AlertableError {
             return alertError.alertMessage.title
         }

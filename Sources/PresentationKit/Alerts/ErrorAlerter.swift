@@ -87,7 +87,7 @@ public extension ErrorAlerter {
 
         var id: String { rawValue }
 
-        var alertMessage: AlertMessage<AnyView, AnyView> {
+        var alertMessage: AlertMessage {
             AlertMessage(
                 title: "A \(rawValue) error occured",
                 message: { Text("Please try again.") },
