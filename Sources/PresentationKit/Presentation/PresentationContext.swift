@@ -8,6 +8,9 @@
 
 import SwiftUI
 
+/// This alias makes ``PresentationContext`` easier to use.
+public typealias Presentation = PresentationContext
+
 /// This class can store generic values that are meant to be
 /// presented in e.g. an alert, modal or sheet.
 ///
@@ -19,6 +22,8 @@ import SwiftUI
 /// You can extend `FocusedValues` with non-generic contexts
 /// to be able to trigger scene presentations from the macOS
 /// menu bar. See the demo app for examples.
+///
+/// > Tip: For less code, use the ``Presentation`` typealias.
 @Observable
 public final class PresentationContext<ItemType> {
 
@@ -48,21 +53,26 @@ public extension View {
 
     /// Presents an alert when the context item is set.
     ///
-    /// The ``AlertMessage`` struct has several mutations to
-    /// let you create different kinds of messages.
+    /// You must return an ``AlertMessage`` value to present
+    /// an alert. Return `nil` if you don't want to show one
+    /// for any item. This can be used to make a view handle
+    /// a subset of many available alerts, e.g. when using a
+    /// single enum for all available alerts in an app.
     func alert<Item: Identifiable>(
         for context: Binding<PresentationContext<Item>>,
-        content: @escaping (Item) -> AlertMessage
+        content: @escaping (Item) -> AlertMessage?
     ) -> some View {
-        self.alert(
-            context.wrappedValue.item.map(content)?.title ?? "",
+        let item = context.wrappedValue.item
+        let message = item.flatMap(content)
+        return self.alert(
+            message?.title ?? "",
             isPresented: Binding(
-                get: { context.wrappedValue.item != nil },
+                get: { message != nil },
                 set: { if !$0 { context.wrappedValue.item = nil } }
             ),
-            presenting: context.wrappedValue.item,
-            actions: { item in content(item).actions() },
-            message: { item in content(item).message() }
+            presenting: message != nil ? item : nil,
+            actions: { _ in message?.actions() },
+            message: { _ in message?.message() }
         )
     }
 
@@ -117,9 +127,9 @@ public extension View {
 
     struct MyView: View {
 
-        @State var alertContext = PresentationContext<MyContent>()
-        @State var coverContext = PresentationContext<MyContent>()
-        @State var sheetContext = PresentationContext<MyContent>()
+        @State var alertContext = Presentation<MyContent>()
+        @State var coverContext = Presentation<MyContent>()
+        @State var sheetContext = Presentation<MyContent>()
 
         var body: some View {
             List {
@@ -134,14 +144,18 @@ public extension View {
                 }
             }
             .alert(for: $alertContext) { content in
-                AlertMessage(
-                    title: LocalizedStringResource(stringLiteral: content.id),
-                    message: { EmptyView() },
-                    actions: {
-                        Button("Cancel", role: .cancel) {}
-                        Button("OK", role: .none) {}
-                    }
-                )
+                switch content {
+                case .red:
+                    AlertMessage(
+                        title: LocalizedStringResource(stringLiteral: content.id),
+                        message: { EmptyView() },
+                        actions: {
+                            Button("Cancel", role: .cancel) {}
+                            Button("OK", role: .none) {}
+                        }
+                    )
+                default: nil
+                }
             }
             #if !os(macOS)
             .fullScreenCover(for: $coverContext) { content in

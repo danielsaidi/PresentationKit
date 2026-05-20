@@ -13,6 +13,16 @@ These release notes only cover the current major version.
 
 
 
+## 1.1.1
+
+This version makes it possible to not return `nil` to avoid presenting an alert.
+
+### 💡 Adjustments
+
+* The `.alert(for:content:)` modifier now allows you to return `nil` to avoid presenting an alert.
+
+
+
 ## 1.1
 
 This version simplifies the `AlertMessage` to be non-generic.

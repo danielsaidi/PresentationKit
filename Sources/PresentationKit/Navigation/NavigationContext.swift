@@ -8,7 +8,12 @@
 
 import SwiftUI
 
+/// This alias makes ``NavigationContext`` easier to use.
+public typealias Navigation = NavigationContext
+
 /// This type can be used to manage a value-based navigation.
+///
+/// > Tip: For less code, use the ``Navigation`` typealias.
 @Observable
 public class NavigationContext<Model: Hashable> {
 
