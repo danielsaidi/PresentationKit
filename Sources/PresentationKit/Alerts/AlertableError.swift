@@ -45,6 +45,9 @@ public extension View {
             message: { alertMessage(for: $0) }
         )
     }
+}
+
+private extension View {
 
     func alertTitle(for item: (any Error)?) -> LocalizedStringKey {
         if let alertError = item as? any AlertableError {

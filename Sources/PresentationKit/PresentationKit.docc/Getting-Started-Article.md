@@ -5,7 +5,15 @@ This article describes how to get started with PresentationKit.
 PresentationKit makes it easy to present alerts, sheets, and modals for any identifiable model, using a ``PresentationContext``. The library also has additional utilities for alerts, errors, navigation, and sheets.
 
 
-## PresentationContext
+## Navigation
+
+The observable ``NavigationContext`` class makes it easy to perform value-based navigation.
+
+The ``NavigationContext/path`` can be bound to a navigation stack, and used to push and pop content to the stack.
+
+
+
+## Presentation
 
 The observable ``PresentationContext`` class makes it easy to present alerts, sheets, and modals in the same way, in a single way.
 

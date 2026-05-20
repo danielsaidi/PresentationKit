@@ -19,13 +19,13 @@ import SwiftUI
 /// using the ``SwiftUICore/View/alert(for:)`` modifier, the
 /// ``AlertableError/alertMessage`` is automatically alerted,
 /// while other errors will alert the localized description.
+@MainActor
 public protocol ErrorAlerter {
 
     /// The alert context to use to present errors.
     var errorContext: PresentationContext<Error> { get }
 }
 
-@MainActor
 public extension ErrorAlerter {
 
     /// Alert an error error.

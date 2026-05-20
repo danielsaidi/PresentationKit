@@ -19,7 +19,7 @@ public extension View {
     }
 }
 
-/// This detent type causess a sheet to fit its content.
+/// This detent type causes a sheet to fit its content.
 public enum SizeToFitPresentationDetent {
     
     case sizeToFit
