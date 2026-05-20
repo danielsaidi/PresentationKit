@@ -35,6 +35,11 @@ public extension PresentationContext {
     func present(_ item: ItemType) {
         self.item = item
     }
+
+    /// Dismiss the currently presented value.
+    func dismiss() {
+        self.item = nil
+    }
 }
 
 // MARK: - View Extensions

@@ -6,6 +6,16 @@ Until then, breaking changes can happen in any version, and deprecations may be 
 
 
 
+## 1.0.1
+
+This version adds a dismiss function to the navigation context.
+
+### ✨ New Features
+
+* `NavigationContext` has a new `dismiss` function.
+
+
+
 ## 1.0
 
 This version removes a lot of legacy protocols and models and makes the library cleaner.
