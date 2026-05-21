@@ -12,13 +12,11 @@
 
 # PresentationKit
 
-PresentationKit is a SwiftUI library that makes it easy to present alerts, sheets, and full screen covers for any model, by using an observable ``Presentation``.
+PresentationKit is a SwiftUI library that makes it easy to present alerts, sheets, full screen covers, and toasts for any model, using an observable `Presentation` class.
 
 <p align="center">
     <img src="https://github.com/danielsaidi/PresentationKit/releases/download/1.0.0/Demo.gif" alt="Demo Gif" width=1500 />
 </p>
-
-PresentationKit also has utilities to manage alerts, errors, and navigation, and makes it easy to make a sheet size to fit its content, and to animate the sheet smoothly whenever its size changes. 
 
 
 
@@ -40,240 +38,160 @@ PresentationKit supports iOS 17, tvOS 17, macOS 14, watchOS 10, and visionOS 1.
 
 ## Getting Started
 
-Below are some common use-cases. For more information, see the [documentation][Documentation] and its [getting-started guide][Getting-Started].
+PresentationKit has features for value-based navigation and presentation, and lests you present alerts, sheets, full screen covers, and toasts in the same way. See the [documentation][Documentation] for more information.
 
 
 ### Navigation
 
-The observable ``Navigation`` class makes it easy to perform value-based navigation.
+The `Navigation` class makes it easy to perform value-based navigation with a navigation stack.
+
+```swift
+struct MyView: View {
+
+    @State var navigation = Navigation()
+
+    var body: some View {
+        NavigationStack(path: $navigation.path) {
+            Button("Push view") {
+                navigation.push("detail")
+            }
+            .navigationDestination(for: String.self) { value in
+                Text(value)
+            }
+        }
+    }
+}
+```
+
+See the [Navigation article][Navigation] for more information.
 
 
 ### Presentation
 
-The observable ``Presentation`` class makes it easy to present alerts, sheets, and modals in the same way.
-
-To use it, just create an instance and bind it to your view with the context-specific ``.alert(for:content:)``, ``.sheet(for:onDismiss:content:)`` and ``.fullScreenCover(for:onDismiss:content:)`` view modifiers.
+The `Presentation` class is the foundation for presenting alerts, sheets, covers, and toasts. It holds an optional item that can be presented and dismissed.
 
 ```swift
-enum MyContent: String, @MainActor Identifiable, View {
-    case red, green, blue
-
-    var id: String { rawValue.capitalized }
-
-    var body: some View {
-        switch self {
-        case .red: Color.red
-        case .green: Color.green
-        case .blue: Color.blue
-        }
-    }
-}
-
 struct MyView: View {
 
-    @State var alert = Presentation<MyContent>()
-    @State var cover = Presentation<MyContent>()
     @State var sheet = Presentation<MyContent>()
 
     var body: some View {
-        List {
-            Button("Present Red Alert") {
-                alert.present(.red)
-            }
-            Button("Present Green Cover") {
-                cover.present(.green)
-            }
-            Button("Present Blue Sheet") {
-                sheet.present(.blue)
-            }
+        Button("Show sheet") {
+            sheet.present(.someValue)
         }
-        .alert(for: $alert) { content in
-            AlertMessage(title: content.id)
-        }
-        #if !os(macOS)
-        .fullScreenCover(for: $cover) { content in
-            content
-        }
-        #endif
         .sheet(for: $sheet) { content in
-            content
+            MySheetView(content: content)
         }
     }
 }
 ```
 
-As you see above, the alert modifier returns an ``AlertMessage`` while the cover and sheet modifiers return views. 
+See the [Presentation article][Presentation] for more information.
 
 
 ### Alerts
 
-Any type that implements ``ErrorAlerter`` can perform throwing async operations with automatic error alerts. If the error conforms to ``AlertableError``, the `.alert(for:)` will automatically map it to a message.
+The `.alert(for:content:)` modifier presents an alert for any `Presentation` instance. Return an `AlertMessage` for the item to present.
 
 ```swift
-enum MyError: String, AlertableError {
-    case minor, major
+struct MyView: View {
 
-    var id: String { rawValue }
-
-    var alertMessage: AlertMessage<AnyView, AnyView> {
-        AlertMessage(
-            title: "A \(rawValue) error occured",
-            message: { Text("Please try again") },
-            actions: { Button("OK", action: {}) }
-        )
-    }
-}
-
-struct MyView: View, @MainActor ErrorAlerter {
-
-    @State var alertError = Presentation<Error>()
-
-    func simulateOperation(error: Error?) async throws {
-        if let error { throw error }
-    }
+    @State var alert = Presentation<MyContent>()
 
     var body: some View {
-        List {
-            Button("Perform a successful operation") {
-                tryWithErrorAlert {
-                    try await simulateOperation(error: nil)
-                }
-            }
-            Button("Perform a minor failing operation") {
-                tryWithErrorAlert {
-                    try await simulateOperation(error: MyError.minor)
-                }
-            }
-            Button("Perform a major failing operation") {
-                tryWithErrorAlert {
-                    try await simulateOperation(error: MyError.major)
-                }
+        Button("Show alert") {
+            alert.present(.someValue)
+        }
+        .alert(for: $alert) { content in
+            AlertMessage(title: content.title) {
+                Button("OK") {}
+            } message: {
+                Text(content.message)
             }
         }
-        .alert(for: $alertError)
     }
 }
 ```
 
-As you can see above, the alert modifier we use here doesn't need to define an alert content builder, since the error will automatically be converted to a message.
+Types that implement `ErrorAlerter` can perform throwing async operations with automatic error alerts. If the error conforms to `AlertableError`, `.alert(for:)` maps it to an `AlertMessage` automatically.
+
+See the [Alerts article][Alerts] for more information.
 
 
 ### Sheets
 
-PresentationKit makes it easy to present sheets that automatically animate any size changes, and that resize to fit their content views.
-
-#### Animated Size Changes
-
-You can use the ``.presentationDetents(animated:manual:)`` modifier to make a sheet animate its size changes, with additional manual detents that the user can apply by dragging the sheet handle:
+The `.sheet(for:content:)` modifier presents a sheet for any `Presentation` instance. PresentationKit also has modifiers for animated size changes and size-to-fit behavior.
 
 ```swift
 struct MyView: View {
 
-    @State var isPresented = true
-    @State var size: AnimatedPresentationDetent = .sizeToFit
+    @State var sheet = Presentation<MyContent>()
 
     var body: some View {
-        Button("Present Sheet") {
-            isPresented.toggle()
+        Button("Show sheet") {
+            sheet.present(.someValue)
         }
-        .sheet(isPresented: $isPresented) {
-            MySheet(size: $size)
-                .presentationDetents(
-                    animated: size,
-                    manual: [.medium, .large]
-                )
+        .sheet(for: $sheet) { content in
+            MySheetView(content: content)
+                .presentationDetents(.sizeToFit, additional: [.medium, .large])
+                // animated sheets: .presentationDetents(animated: size, manual: [.medium])
         }
-    }
-}
-
-struct MySheet: View {
-
-    @Binding var size: AnimatedPresentationDetent
-
-    @State var isExpanded = false
-
-    var body: some View {
-        VStack(spacing: 16) {
-            Text("Sheet Title")
-                .font(.title.bold())
-
-            Text("Sheet Text")
-
-            if isExpanded {
-                RoundedRectangle(cornerRadius: 10)
-                    .fill(.blue)
-                    .frame(height: 200)
-            }
-
-            HStack {
-                Button("Toggle Size") {
-                    size = size == .sizeToFit ? .fraction(0.5) : .sizeToFit
-                }
-                Button("Toggle Content") {
-                    isExpanded.toggle()
-                }
-            }
-            .buttonStyle(.borderedProminent)
-        }
-        .padding()
     }
 }
 ```
 
-The ``AnimatedPresentationDetent`` enum has a ``.sizeToFit`` detent, as well as ``.fraction(_:)`` & ``.height(_:)`` variants, and ``.small``, ``.medium``, & ``.large`` values that approximate the system defaults. 
+See the [Sheets article][Sheets] for more information.
 
 
-#### Size to fit
+### Full Screen Covers
 
-You can use the ``.presentationDetents(_:additional:)`` modifier to make a sheet fit its content, with additional standard detents that the user can apply by dragging the sheet handle:
+The `.fullScreenCover(for:content:)` modifier presents a full screen cover for any `Presentation` instance.
 
 ```swift
 struct MyView: View {
 
-    @State var isPresented = true
+    @State var cover = Presentation<MyContent>()
 
     var body: some View {
-        Button("Present Sheet") {
-            isPresented.toggle()
+        Button("Show cover") {
+            cover.present(.someValue)
         }
-        .sheet(isPresented: $isPresented) {
-            MySheet()
-                .presentationDetents(
-                    .sizeToFit,
-                    additional: [.medium, .large]
-                )
+        #if !os(macOS)
+        .fullScreenCover(for: $cover) { content in
+            MyCoverView(content: content)
         }
-    }
-}
-
-struct MySheet: View {
-
-    @State var isExpanded = false
-
-    var body: some View {
-        VStack(spacing: 16) {
-            Text("Sheet Title")
-                .font(.title.bold())
-
-            Text("Sheet Text")
-
-            if isExpanded {
-                RoundedRectangle(cornerRadius: 10)
-                    .fill(.blue)
-                    .frame(height: 200)
-            }
-
-            Button("Toggle Content") {
-                isExpanded.toggle()
-            }
-            .buttonStyle(.borderedProminent)
-        }
-        .padding()
+        #endif
     }
 }
 ```
 
-Note that this modifier uses standard system detents under the hood, which means that any size changes are not animated. Use this if you want to present a content view that will not change its size.
+See the [Full Screen Covers article][FullScreenCovers] for more information.
+
+
+### Toasts
+
+The `.toast(for:edge:content:)` modifier presents a toast for any `Presentation` instance. Toasts slide in from a screen edge and auto-dismiss after a configurable duration.
+
+```swift
+struct MyView: View {
+
+    @State var toast = Presentation<MyToast>()
+
+    var body: some View {
+        Button("Show toast") {
+            toast.present(.init(message: "Hello!"))
+        }
+        .toast(for: $toast) { item in
+            ToastMessage(item.message)
+                .padding()
+        }
+    }
+}
+```
+
+Use `.toastDuration(seconds:)` on the content view to customize the auto-dismiss duration, and `edge: .bottom` to slide in from the bottom edge.
+
+See the [Toasts article][Toasts] for more information.
 
 
 
@@ -322,5 +240,11 @@ PresentationKit is available under the MIT license. See the [LICENSE][License] f
 [Twitter]: https://twitter.com/danielsaidi
 
 [Documentation]: https://danielsaidi.github.io/PresentationKit
-[Getting-Started]: https://danielsaidi.github.io/PresentationKit
 [License]: https://github.com/danielsaidi/presentationkit/blob/master/LICENSE
+
+[Navigation]: https://danielsaidi.github.io/PresentationKit/documentation/presentationkit/navigation-article
+[Presentation]: https://danielsaidi.github.io/PresentationKit/documentation/presentationkit/presentation-article
+[Alerts]: https://danielsaidi.github.io/PresentationKit/documentation/presentationkit/alerts-article
+[Sheets]: https://danielsaidi.github.io/PresentationKit/documentation/presentationkit/sheets-article
+[FullScreenCovers]: https://danielsaidi.github.io/PresentationKit/documentation/presentationkit/full-screen-covers-article
+[Toasts]: https://danielsaidi.github.io/PresentationKit/documentation/presentationkit/toasts-article
