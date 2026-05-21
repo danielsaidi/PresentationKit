@@ -322,5 +322,5 @@ PresentationKit is available under the MIT license. See the [LICENSE][License] f
 [Twitter]: https://twitter.com/danielsaidi
 
 [Documentation]: https://danielsaidi.github.io/PresentationKit
-[Getting-Started]: https://danielsaidi.github.io/PresentationKit/documentation/presentationkit/getting-started
+[Getting-Started]: https://danielsaidi.github.io/PresentationKit
 [License]: https://github.com/danielsaidi/presentationkit/blob/master/LICENSE

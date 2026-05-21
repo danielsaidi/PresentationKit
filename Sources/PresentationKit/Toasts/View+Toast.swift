@@ -33,7 +33,7 @@ private struct ToastModifier<Item: Identifiable, ToastContent: View>: ViewModifi
 
     @State private var visibleItem: Item?
     @State private var dismissTask: Task<Void, Never>?
-    @State private var duration: Double = 5
+    @State private var duration: Double = ToastDuration.defaultDuration
 
     func body(content: Content) -> some View {
         content.overlay(alignment: edge.alignment) {
@@ -42,7 +42,7 @@ private struct ToastModifier<Item: Identifiable, ToastContent: View>: ViewModifi
                     .transition(.move(edge: edge.swiftUIEdge).combined(with: .opacity))
                     .onTapGesture { dismiss() }
                     .gesture(edge.dismissSwipe { dismiss() })
-                    .onPreferenceChange(ToastDurationKey.self) { duration = $0 ?? 5 }
+                    .onPreferenceChange(ToastDurationKey.self) { duration = $0 ?? ToastDuration.defaultDuration }
                     .onAppear { scheduleDismiss(after: duration) }
             }
         }

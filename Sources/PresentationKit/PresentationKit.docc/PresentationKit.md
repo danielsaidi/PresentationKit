@@ -1,12 +1,12 @@
 # ``PresentationKit``
 
-A SwiftUI library that makes it easy to present alerts and modal content.
+A SwiftUI library that makes it easy to present and navigate to items.
 
 ## Overview
 
 ![Library logotype](Logo.png)
 
-PresentationKit is a SwiftUI library that makes it easy to perform value-based ``Navigation`` and value-based alert, sheet, and modal ``Presentation``. The library also has additional utilities for alerts, errors, navigation, and sheets.
+PresentationKit is a SwiftUI library that makes it easy to perform value-based ``Navigation`` and value-based alert, sheet, and modal ``Presentation``. The library also has additional utilities for alerts, errors, navigation, sheets, and toasts.
 
 
 
@@ -28,7 +28,49 @@ PresentationKit supports iOS 17, tvOS 17, macOS 14, watchOS 10, and visionOS 1.
 
 ## Getting Started
 
-The <doc:Getting-Started-Article> article has information on how to get started with PresentationKit.
+The documentation has separate articles for each feature in the library. 
+
+### Navigation
+
+The ``Navigation`` class makes it easy to perform value-based navigation with a navigation stack.
+
+See the <doc:Navigation-Article> article for more information.
+
+
+### Presentation
+
+The ``Presentation`` class makes it easy to perform value-based presentations and dismissals. It's the foundation to presenting <doc:Alerts-Article>, <doc:Full-Screen-Covers-Article>, <doc:Sheets-Article>, and <doc:Toasts-Article> .
+
+See the <doc:Presentation-Article> article for more information.
+
+
+### Alerts
+
+PresentationKit makes it easy to present alerts and automatically handle errors thrown during async operations.
+
+See the <doc:Alerts-Article> article for more information.
+
+
+### Sheets
+
+PresentationKit makes it easy to present sheets, with additional utilities for animated size changes and size-to-fit behavior.
+
+See the <doc:Sheets-Article> article for more information.
+
+
+### Full Screen Covers
+
+PresentationKit makes it easy to present full screen covers on all non-macOS platforms.
+
+See the <doc:Full-Screen-Covers-Article> article for more information.
+
+
+### Toasts
+
+PresentationKit makes it easy to present toasts that slide in from a screen edge and auto-dismiss after a configurable duration.
+
+See the <doc:Toasts-Article> article for more information.
+
 
 
 
@@ -61,6 +103,12 @@ PresentationKit is available under the MIT license.
 ### Articles
 
 - <doc:Getting-Started-Article>
+- <doc:Presentation-Article>
+- <doc:Navigation-Article>
+- <doc:Alerts-Article>
+- <doc:Sheets-Article>
+- <doc:Full-Screen-Covers-Article>
+- <doc:Toasts-Article>
 
 ### Essentials
 
@@ -83,6 +131,19 @@ PresentationKit is available under the MIT license.
 
 - ``AnimatedPresentationDetent``
 - ``SizeToFitPresentationDetent``
+
+### Toasts
+
+- ``Toast``
+- ``ToastDuration``
+- ``ToastMessage``
+- ``ToastStyle``
+- ``ToastShadowStyle``
+- ``ToastPresentationEdge``
+
+### Extensions
+
+- ``SwiftUICore/View``
 
 
 

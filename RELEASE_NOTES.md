@@ -15,9 +15,13 @@ These release notes only cover the current major version.
 
 ## 1.3
 
+This version adds toast support.
+
 ### ✨ New Features
 
+* The library now supports presenting toast messages with a `Presentation` value. 
 * The `.alert(for:)` modifier has a new alternative that lets you customize the default values.
+* The `.toast(for:content:)` modifier can be used to present toasts with a presentation binding. 
 
 
 
