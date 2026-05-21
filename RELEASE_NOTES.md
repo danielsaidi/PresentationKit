@@ -13,6 +13,16 @@ These release notes only cover the current major version.
 
 
 
+## 1.3.1
+
+This version adds localized toast support.
+
+### ✨ New Features
+
+* The `ToastMessage` can now be created with a `LocalizedStringResource`. 
+
+
+
 ## 1.3
 
 This version adds toast support.

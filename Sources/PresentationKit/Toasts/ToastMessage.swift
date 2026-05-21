@@ -15,6 +15,10 @@ public struct ToastMessage: View {
         self.message = message
     }
 
+    public init(_ message: LocalizedStringResource) {
+        self.message = .init(localized: message)
+    }
+
     private let message: String
 
     public var body: some View {
