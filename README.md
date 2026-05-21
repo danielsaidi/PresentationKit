@@ -121,7 +121,7 @@ enum MyError: String, AlertableError {
 
 struct MyView: View, @MainActor ErrorAlerter {
 
-    @State var errorContext = PresentationContext<Error>()
+    @State var alertError = PresentationContext<Error>()
 
     func simulateOperation(error: Error?) async throws {
         if let error { throw error }
@@ -145,7 +145,7 @@ struct MyView: View, @MainActor ErrorAlerter {
                 }
             }
         }
-        .alert(for: $errorContext)
+        .alert(for: $alertError)
     }
 }
 ```

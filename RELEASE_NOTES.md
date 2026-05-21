@@ -13,23 +13,31 @@ These release notes only cover the current major version.
 
 
 
-## 1.1.1
+## 1.2
 
-This version makes it possible to not return `nil` to avoid presenting an alert.
+This version makes a few breaking changes to the library, despite the semantic versioning.
 
-### 💡 Adjustments
+The reason for this is that the library still has few users, and the alternative is worse. 
 
-* The `.alert(for:content:)` modifier now allows you to return `nil` to avoid presenting an alert.
+### ✨ New Features
+
+* The new `Navigation` typealias can be used instead of `NavigationContext`.
+* The new `Presentation` typealias can be used instead of `PresentationContext`.
+* The `.alert(for:content:)` modifier now lets you return `nil` to avoid alerting.
+
+### 💡 Changes
+
+* The `ErrorAlerter` now calls its property `alertError` instead of `errorContext`.
 
 
 
 ## 1.1
 
-This version simplifies the `AlertMessage` to be non-generic.
+This version makes a breaking change to the library, despite the semantic versioning.
 
-This is a breaking change, but the alternative was worse, after running into problems.
+The reason for this is that the library still has very few users, and the alternative is worse. 
 
-### 💡 Adjustments
+### 💡 Changes
 
 * `AlertMessage` is non-generic and supports `String` and `LocalizedStringResource` instead of `LocalizedStringKey`.
 
@@ -108,7 +116,7 @@ This version adds new error utilities.
 
 * `ErrorAlerter` can be implemented to make it easy to handle errors.
 
-### 💡 Adjustments
+### 💡 Changes
 
 * `PresentationContext` no longer requires models to be identifiable.
 

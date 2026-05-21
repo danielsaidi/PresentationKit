@@ -14,7 +14,7 @@ import SwiftUI
 /// When an ``ErrorAlerter`` type alerts an ``AlertableError``
 /// using the ``SwiftUICore/View/alert(for:)`` modifier, the
 /// ``AlertableError/alertMessage`` is automatically alerted,
-/// while other errors will alert the localized description.
+/// while other errors will alert the localized descriptions.
 public protocol AlertableError: Error {
 
     /// The alert message to display.

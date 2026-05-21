@@ -11,11 +11,10 @@ import SwiftUI
 
 struct ContentView: View, ErrorAlerter {
 
-    @State var alertContext = PresentationContext<DemoContent>()
-    @State var coverContext = PresentationContext<DemoContent>()
-    @State var sheetContext = PresentationContext<DemoContent>()
-
-    @State var errorContext = PresentationContext<Error>()
+    @State var alert = PresentationContext<DemoContent>()
+    @State var alertError = PresentationContext<Error>()
+    @State var cover = PresentationContext<DemoContent>()
+    @State var sheet = PresentationContext<DemoContent>()
 
     @State var animatedSheetSize = AnimatedPresentationDetent.sizeToFit
     @State var isAnimatedSheetPresented = false
@@ -26,13 +25,13 @@ struct ContentView: View, ErrorAlerter {
             List {
                 Section("Presentation Context") {
                     Button("Present Red Alert") {
-                        alertContext.present(.red)
+                        alert.present(.red)
                     }
                     Button("Present Green Cover") {
-                        coverContext.present(.green)
+                        cover.present(.green)
                     }
                     Button("Present Blue Sheet") {
-                        sheetContext.present(.blue)
+                        sheet.present(.blue)
                     }
                 }
 
@@ -64,16 +63,16 @@ struct ContentView: View, ErrorAlerter {
                 }
             }
             .navigationTitle("PresentationKit")
-            .alert(for: $alertContext) { content in
+            .alert(for: $alert) { content in
                 AlertMessage(title: content.id)
             }
-            .alert(for: $errorContext)
+            .alert(for: $alertError)
             #if !os(macOS)
-            .fullScreenCover(for: $coverContext) { content in
+            .fullScreenCover(for: $cover) { content in
                 DemoContentCover(content: content)
             }
             #endif
-            .sheet(for: $sheetContext) { content in
+            .sheet(for: $sheet) { content in
                 DemoContentSheet(content: content)
             }
             .sheet(isPresented: $isAnimatedSheetPresented) {
