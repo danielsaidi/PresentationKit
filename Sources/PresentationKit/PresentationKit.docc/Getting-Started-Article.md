@@ -2,22 +2,20 @@
 
 This article describes how to get started with PresentationKit.
 
-PresentationKit makes it easy to present alerts, sheets, and modals for any identifiable model, using a ``PresentationContext``. The library also has additional utilities for alerts, errors, navigation, and sheets.
+PresentationKit makes it easy to perform value-based ``Navigation`` and value-based alert, sheet, and modal ``Presentation``. The library also has additional utilities for alerts, errors, navigation, and sheets.
 
 
 ## Navigation
 
-The observable ``NavigationContext`` class makes it easy to perform value-based navigation.
-
-The ``NavigationContext/path`` can be bound to a navigation stack, and used to push and pop content to the stack.
+The observable ``Navigation`` class makes it easy to perform value-based navigation. The ``Navigation/path`` can be bound to a navigation stack, and used to push and pop content to the stack.
 
 
 
 ## Presentation
 
-The observable ``PresentationContext`` class makes it easy to present alerts, sheets, and modals in the same way, in a single way.
+The observable ``Presentation`` class makes it easy to present alerts, sheets, and modals in a single way. It has a single ``Presentation/item`` that you can ``Presentation/present(_:)`` and ``Presentation/dismiss()``. 
 
-To use it, just create a context instance and bind it to your view with the context-specific ``SwiftUICore/View/alert(for:content:)``, ``SwiftUICore/View/sheet(for:onDismiss:content:)`` and ``SwiftUICore/View/fullScreenCover(for:onDismiss:content:)`` view modifiers.
+To use it, just create an instance and bind it to any view with the ``SwiftUICore/View/alert(for:content:)``, ``SwiftUICore/View/sheet(for:onDismiss:content:)`` and ``SwiftUICore/View/fullScreenCover(for:onDismiss:content:)`` view modifiers, then call ``Presentation/present(_:)`` to automatically present an item.
 
 ```swift
 enum MyContent: String, @MainActor Identifiable, View {
@@ -36,31 +34,31 @@ enum MyContent: String, @MainActor Identifiable, View {
 
 struct MyView: View {
 
-    @State var alertContext = PresentationContext<MyContent>()
-    @State var coverContext = PresentationContext<MyContent>()
-    @State var sheetContext = PresentationContext<MyContent>()
+    @State var alert = Presentation<MyContent>()
+    @State var cover = Presentation<MyContent>()
+    @State var sheet = Presentation<MyContent>()
 
     var body: some View {
         List {
             Button("Present Red Alert") {
-                alertContext.present(.red)
+                alert.present(.red)
             }
             Button("Present Green Cover") {
-                coverContext.present(.green)
+                cover.present(.green)
             }
             Button("Present Blue Sheet") {
-                sheetContext.present(.blue)
+                sheet.present(.blue)
             }
         }
-        .alert(for: $alertContext) { content in
+        .alert(for: $alert) { content in
             AlertMessage(title: content.id)
         }
         #if !os(macOS)
-        .fullScreenCover(for: $coverContext) { content in
+        .fullScreenCover(for: $cover) { content in
             content
         }
         #endif
-        .sheet(for: $sheetContext) { content in
+        .sheet(for: $sheet) { content in
             content
         }
     }
@@ -93,7 +91,7 @@ enum MyError: String, AlertableError {
 
 struct MyView: View, @MainActor ErrorAlerter {
 
-    @State var alertError = PresentationContext<Error>()
+    @State var alertError = Presentation<Error>()
 
     func simulateOperation(error: Error?) async throws {
         if let error { throw error }

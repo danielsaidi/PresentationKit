@@ -1,5 +1,5 @@
 //
-//  NavigationContext.swift
+//  Navigation.swift
 //  PresentationKit
 //
 //  Created by Daniel Saidi on 2025-06-20.
@@ -8,14 +8,14 @@
 
 import SwiftUI
 
-/// This alias makes ``NavigationContext`` easier to use.
-public typealias Navigation = NavigationContext
+@available(*, deprecated, renamed: "Navigation")
+public typealias NavigationContext = Navigation
 
 /// This type can be used to manage a value-based navigation.
 ///
 /// > Tip: For less code, use the ``Navigation`` typealias.
 @Observable
-public class NavigationContext<Model: Hashable> {
+public class Navigation<Model: Hashable> {
 
     /// Create a new navigation context instance.
     public init() {}
@@ -24,7 +24,7 @@ public class NavigationContext<Model: Hashable> {
     public var path = [Model]()
 }
 
-public extension NavigationContext {
+public extension Navigation {
 
     /// Go back a certain number of steps.
     func goBack(_ steps: Int) {

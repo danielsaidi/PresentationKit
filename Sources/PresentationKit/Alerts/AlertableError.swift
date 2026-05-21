@@ -28,11 +28,11 @@ public extension View {
     /// Presents an alert when the context item is set.
     ///
     /// This modifier tries to cast the item to ``AlertError``
-    /// and uses its ``AlertError/alertMessage`` if it can. If
-    /// the cast fails, a default alert is shown that uses the
-    /// item's `localizedDescription` as the message.
+    /// and uses its ``AlertError/alertMessage`` if possible.
+    /// If the cast fails, a default alert is shown with the
+    /// error's `localizedDescription` message.
     func alert<Item: Error>(
-        for context: Binding<PresentationContext<Item>>
+        for context: Binding<Presentation<Item>>
     ) -> some View {
         self.alert(
             alertTitle(for: context.wrappedValue.item),

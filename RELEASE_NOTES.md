@@ -21,13 +21,13 @@ The reason for this is that the library still has few users, and the alternative
 
 ### ✨ New Features
 
-* The new `Navigation` typealias can be used instead of `NavigationContext`.
-* The new `Presentation` typealias can be used instead of `PresentationContext`.
 * The `.alert(for:content:)` modifier now lets you return `nil` to avoid alerting.
 
 ### 💡 Changes
 
-* The `ErrorAlerter` now calls its property `alertError` instead of `errorContext`.
+* The `ErrorAlerter` now has an `alertError` instead of an `errorContext`.
+* The `NavigationContext` is renamed to `Navigation`.
+* The `PresentationContext` is renamed to `Presentation`.
 
 
 

@@ -6,9 +6,7 @@ A SwiftUI library that makes it easy to present alerts and modal content.
 
 ![Library logotype](Logo.png)
 
-PresentationKit is a SwiftUI library that makes it easy to present alerts, sheets, and full screen covers for any identifiable model, by using an observable ``PresentationContext``.
-
-PresentationKit also has utilities to manage alerts, errors, and navigation, and makes it easy to make a sheet size to fit its content, and to animate the sheet smoothly whenever its size changes.
+PresentationKit is a SwiftUI library that makes it easy to perform value-based ``Navigation`` and value-based alert, sheet, and modal ``Presentation``. The library also has additional utilities for alerts, errors, navigation, and sheets.
 
 
 
@@ -64,6 +62,11 @@ PresentationKit is available under the MIT license.
 
 - <doc:Getting-Started-Article>
 
+### Essentials
+
+- ``Navigation``
+- ``Presentation``
+
 ### Alerts
 
 - ``AlertableError``
@@ -75,11 +78,6 @@ PresentationKit is available under the MIT license.
 - ``NavigationButton``
 - ``NavigationChevron``
 - ``NavigationChevronStyle``
-- ``NavigationContext``
-
-### Presentation
-
-- ``PresentationContext``
 
 ### Sheets
 

@@ -1,5 +1,5 @@
 //
-//  PresentationContext.swift
+//  Presentation.swift
 //  PresentationKit
 //
 //  Created by Daniel Saidi on 2025-06-19.
@@ -8,8 +8,8 @@
 
 import SwiftUI
 
-/// This alias makes ``PresentationContext`` easier to use.
-public typealias Presentation = PresentationContext
+@available(*, deprecated, renamed: "Presentation")
+public typealias PresentationContext = Presentation
 
 /// This class can store generic values that are meant to be
 /// presented in e.g. an alert, modal or sheet.
@@ -25,7 +25,7 @@ public typealias Presentation = PresentationContext
 ///
 /// > Tip: For less code, use the ``Presentation`` typealias.
 @Observable
-public final class PresentationContext<ItemType> {
+public final class Presentation<ItemType> {
 
     /// Create a new context instance.
     public init() {}
@@ -34,7 +34,7 @@ public final class PresentationContext<ItemType> {
     public var item: ItemType?
 }
 
-public extension PresentationContext {
+public extension Presentation {
 
     /// Present the provided value.
     func present(_ item: ItemType) {
@@ -59,7 +59,7 @@ public extension View {
     /// a subset of many available alerts, e.g. when using a
     /// single enum for all available alerts in an app.
     func alert<Item: Identifiable>(
-        for context: Binding<PresentationContext<Item>>,
+        for context: Binding<Presentation<Item>>,
         content: @escaping (Item) -> AlertMessage?
     ) -> some View {
         let item = context.wrappedValue.item
@@ -79,7 +79,7 @@ public extension View {
     #if !os(macOS)
     /// Presents a cover when the context item is set.
     func fullScreenCover<Item: Identifiable, Content: View>(
-        for context: Binding<PresentationContext<Item>>,
+        for context: Binding<Presentation<Item>>,
         onDismiss: (() -> Void)? = nil,
         content: @escaping (Item) -> Content
     ) -> some View {
@@ -93,7 +93,7 @@ public extension View {
 
     /// Presents a sheet when the context item is set.
     func sheet<Item: Identifiable, Content: View>(
-        for context: Binding<PresentationContext<Item>>,
+        for context: Binding<Presentation<Item>>,
         onDismiss: (() -> Void)? = nil,
         content: @escaping (Item) -> Content
     ) -> some View {

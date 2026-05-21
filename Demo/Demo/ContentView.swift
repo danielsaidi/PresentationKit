@@ -11,10 +11,10 @@ import SwiftUI
 
 struct ContentView: View, ErrorAlerter {
 
-    @State var alert = PresentationContext<DemoContent>()
-    @State var alertError = PresentationContext<Error>()
-    @State var cover = PresentationContext<DemoContent>()
-    @State var sheet = PresentationContext<DemoContent>()
+    @State var alert = Presentation<DemoContent>()
+    @State var alertError = Presentation<Error>()
+    @State var cover = Presentation<DemoContent>()
+    @State var sheet = Presentation<DemoContent>()
 
     @State var animatedSheetSize = AnimatedPresentationDetent.sizeToFit
     @State var isAnimatedSheetPresented = false
@@ -23,7 +23,7 @@ struct ContentView: View, ErrorAlerter {
     var body: some View {
         NavigationStack {
             List {
-                Section("Presentation Context") {
+                Section("Presentation") {
                     Button("Present Red Alert") {
                         alert.present(.red)
                     }

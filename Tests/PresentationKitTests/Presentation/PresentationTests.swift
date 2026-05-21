@@ -6,9 +6,9 @@ private struct Model: Identifiable, Equatable {
     let id: Int
 }
 
-@Test func presentationContextCanPresentItem() async throws {
+@Test func presentationCanPresentItem() async throws {
     let val = Model(id: 1)
-    let context = PresentationContext<Model>()
+    let context = Presentation<Model>()
 
     #expect(context.item == nil)
     context.present(val)

@@ -23,7 +23,7 @@ import SwiftUI
 public protocol ErrorAlerter {
 
     /// The alert context to use to present errors.
-    var alertError: PresentationContext<Error> { get }
+    var alertError: Presentation<Error> { get }
 }
 
 public extension ErrorAlerter {
@@ -98,7 +98,7 @@ public extension ErrorAlerter {
 
     struct MyView: View, @MainActor ErrorAlerter {
 
-        @State var alertError = PresentationContext<Error>()
+        @State var alertError = Presentation<Error>()
 
         func simulateOperation(error: Error?) async throws {
             if let error { throw error }
