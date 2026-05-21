@@ -27,7 +27,7 @@ public typealias PresentationContext = Presentation
 @Observable
 public final class Presentation<ItemType> {
 
-    /// Create a new context instance.
+    /// Create a new context instance.¬
     public init() {}
 
     /// The value to present.
@@ -44,64 +44,6 @@ public extension Presentation {
     /// Dismiss the currently presented value.
     func dismiss() {
         self.item = nil
-    }
-}
-
-// MARK: - View Extensions
-
-public extension View {
-
-    /// Presents an alert when the context item is set.
-    ///
-    /// You must return an ``AlertMessage`` value to present
-    /// an alert. Return `nil` if you don't want to show one
-    /// for any item. This can be used to make a view handle
-    /// a subset of many available alerts, e.g. when using a
-    /// single enum for all available alerts in an app.
-    func alert<Item: Identifiable>(
-        for context: Binding<Presentation<Item>>,
-        content: @escaping (Item) -> AlertMessage?
-    ) -> some View {
-        let item = context.wrappedValue.item
-        let message = item.flatMap(content)
-        return self.alert(
-            message?.title ?? "",
-            isPresented: Binding(
-                get: { message != nil },
-                set: { if !$0 { context.wrappedValue.item = nil } }
-            ),
-            presenting: message != nil ? item : nil,
-            actions: { _ in message?.actions() },
-            message: { _ in message?.message() }
-        )
-    }
-
-    #if !os(macOS)
-    /// Presents a cover when the context item is set.
-    func fullScreenCover<Item: Identifiable, Content: View>(
-        for context: Binding<Presentation<Item>>,
-        onDismiss: (() -> Void)? = nil,
-        content: @escaping (Item) -> Content
-    ) -> some View {
-        self.fullScreenCover(
-            item: context.item,
-            onDismiss: onDismiss,
-            content: content
-        )
-    }
-    #endif
-
-    /// Presents a sheet when the context item is set.
-    func sheet<Item: Identifiable, Content: View>(
-        for context: Binding<Presentation<Item>>,
-        onDismiss: (() -> Void)? = nil,
-        content: @escaping (Item) -> Content
-    ) -> some View {
-        self.sheet(
-            item: context.item,
-            onDismiss: onDismiss,
-            content: content
-        )
     }
 }
 

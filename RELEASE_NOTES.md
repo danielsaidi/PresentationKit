@@ -13,6 +13,14 @@ These release notes only cover the current major version.
 
 
 
+## 1.3
+
+### ✨ New Features
+
+* The `.alert(for:)` modifier has a new alternative that lets you customize the default values.
+
+
+
 ## 1.2
 
 This version makes a few breaking changes to the library, despite the semantic versioning.
