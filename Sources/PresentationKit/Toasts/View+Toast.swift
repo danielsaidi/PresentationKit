@@ -40,8 +40,9 @@ private struct ToastModifier<Item: Identifiable, ToastContent: View>: ViewModifi
             if let item = visibleItem {
                 self.content(item)
                     .transition(.move(edge: edge.swiftUIEdge).combined(with: .opacity))
-                    .onTapGesture { dismiss() }
+                    #if !os(tvOS) && !os(watchOS)
                     .gesture(edge.dismissSwipe { dismiss() })
+                    #endif
                     .onPreferenceChange(ToastDurationKey.self) { duration = $0 ?? ToastDuration.defaultDuration }
                     .onAppear { scheduleDismiss(after: duration) }
             }

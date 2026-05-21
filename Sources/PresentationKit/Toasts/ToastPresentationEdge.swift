@@ -32,6 +32,7 @@ extension ToastPresentationEdge {
         }
     }
 
+    #if !os(tvOS) && !os(watchOS)
     func dismissSwipe(action: @escaping () -> Void) -> some Gesture {
         DragGesture(minimumDistance: 20)
             .onEnded { value in
@@ -41,4 +42,5 @@ extension ToastPresentationEdge {
                 }
             }
     }
+    #endif
 }
