@@ -40,13 +40,23 @@ public extension View {
     /// This modifier tries to cast the item to ``AlertError``
     /// and uses its ``AlertError/alertMessage`` if possible.
     /// If the cast fails, a default alert is shown with the
-    /// error's `localizedDescription` message.
+    /// error's `localizedDescription` message. You can also
+    /// customize the default values.
     func alert<Item: Error>(
-        for presentation: Binding<Presentation<Item>>
+        for presentation: Binding<Presentation<Item>>,
+        defaultTitle: String? = nil,
+        defaultMessage: String? = nil,
+        defaultButtonTitle: String? = nil
     ) -> some View {
         self.alert(
-            for: presentation,
-            defaultTitle: "Error"
+            alertTitle(for: presentation.wrappedValue.item, default: defaultTitle),
+            isPresented: Binding(
+                get: { presentation.wrappedValue.item != nil },
+                set: { if !$0 { presentation.wrappedValue.item = nil } }
+            ),
+            presenting: presentation.wrappedValue.item,
+            actions: { alertActions(for: $0, defaultButtonTitle: defaultButtonTitle) },
+            message: { alertMessage(for: $0, default: defaultMessage) }
         )
     }
 
@@ -69,32 +79,6 @@ public extension View {
             defaultTitle: defaultTitle?.localized(),
             defaultMessage: defaultMessage?.localized(),
             defaultButtonTitle: defaultButtonTitle?.localized()
-        )
-    }
-
-    /// Presents an error alert when an error is active.
-    ///
-    /// This modifier tries to cast the item to ``AlertError``
-    /// and uses its ``AlertError/alertMessage`` if possible.
-    /// If the cast fails, a default alert is shown with the
-    /// error's `localizedDescription` message. You can also
-    /// customize the default values.
-    @_disfavoredOverload
-    func alert<Item: Error>(
-        for presentation: Binding<Presentation<Item>>,
-        defaultTitle: String? = nil,
-        defaultMessage: String? = nil,
-        defaultButtonTitle: String? = nil,
-    ) -> some View {
-        self.alert(
-            alertTitle(for: presentation.wrappedValue.item, default: defaultTitle),
-            isPresented: Binding(
-                get: { presentation.wrappedValue.item != nil },
-                set: { if !$0 { presentation.wrappedValue.item = nil } }
-            ),
-            presenting: presentation.wrappedValue.item,
-            actions: { alertActions(for: $0, defaultButtonTitle: defaultButtonTitle) },
-            message: { alertMessage(for: $0, default: defaultMessage) }
         )
     }
 }

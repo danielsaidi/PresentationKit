@@ -13,6 +13,12 @@ These release notes only cover the current major version.
 
 
 
+## 1.3.2
+
+This version adjusts `View+Alert` to resolve strange Swift 6 toolchain bugs with disfavored overloads.  
+
+
+
 ## 1.3.1
 
 This version adds localized toast support.
