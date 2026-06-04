@@ -1,0 +1,3 @@
+# Exclude scripts from language analysis
+scripts/** linguist-vendored
+scripts/** linguist-detectable=false
