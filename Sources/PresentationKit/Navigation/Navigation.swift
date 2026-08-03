@@ -11,9 +11,16 @@ import SwiftUI
 @available(*, deprecated, renamed: "Navigation")
 public typealias NavigationContext = Navigation
 
-/// This type can be used to manage a value-based navigation.
+/// This type can be used to manage a value-based navigation
+/// stack that can be bound to a `NavigationStack`.
 ///
-/// > Tip: For less code, use the ``Navigation`` typealias.
+/// You can bind the ``path`` value to a navigation stack of
+/// the same type, then use ``push(_:)`` to push a new value
+/// to the stack, ``pop()`` to remove the last value, etc.
+///
+/// You can extend `FocusedValues` with non-generic contexts
+/// to be able to trigger navigations from e.g. the menu bar.
+/// See the demo app for examples.
 @Observable
 public class Navigation<Model: Hashable> {
 
@@ -26,9 +33,19 @@ public class Navigation<Model: Hashable> {
 
 public extension Navigation {
 
-    /// Go back a certain number of steps.
+    @available(*, deprecated, renamed: "goBack(steps:)")
     func goBack(_ steps: Int) {
+        goBack(steps: steps)
+    }
+
+    /// Go back a certain number of steps.
+    func goBack(steps: Int) {
         path.removeLast(steps)
+    }
+
+    /// Go back a certain number of steps.
+    func pop() {
+        goBack(steps: 1)
     }
 
     /// Pop back to the root.

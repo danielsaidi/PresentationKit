@@ -11,19 +11,17 @@ import SwiftUI
 @available(*, deprecated, renamed: "Presentation")
 public typealias PresentationContext = Presentation
 
-/// This class can store generic values that are meant to be
-/// presented in e.g. an alert, modal or sheet.
+/// This type can be used to manage an observed presentation
+/// state that can be bound to a modal, a sheet, etc.
 ///
-/// You can bind the context ``item`` value to a native view
-/// modifier like `.sheet(item:content:)`, or use any of the
-/// context-specific versions of the modifiers. You can then
-/// use ``item`` or ``present(_:)`` to present items.
+/// You can use the ``item`` value with a view modifier like
+/// `.sheet(item:content:)` to perform the presentation when
+/// the ``item`` is set by either setting the property or by
+/// using the ``present(_:)`` function.
 ///
 /// You can extend `FocusedValues` with non-generic contexts
-/// to be able to trigger scene presentations from the macOS
-/// menu bar. See the demo app for examples.
-///
-/// > Tip: For less code, use the ``Presentation`` typealias.
+/// to be able to trigger presentations from e.g. a menu bar.
+/// See the demo app for examples.
 @Observable
 public final class Presentation<ItemType> {
 
