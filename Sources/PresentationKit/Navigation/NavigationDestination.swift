@@ -12,8 +12,8 @@ import SwiftUI
 /// used as a navigation stack destination.
 ///
 /// Use the ``SwiftUI/NavigationStack/init(root:navigation:)``
-/// initializer to create a navigation stack that's bound to
-/// a certain navigation destination type.
+/// initializer or the ``NavigationDestinationStack`` to get
+/// a stack that uses a certain navigation destination value.
 public protocol NavigationDestination: Hashable {
 
     associatedtype DestinationContent: View
@@ -59,6 +59,50 @@ public struct NavigationDestinationContent<Destination: NavigationDestination>: 
     }
 }
 
+/// This view can be used as a `NavigationStack` alternative.
+///
+/// Unlike the ``SwiftUI/NavigationStack`` initializer, this
+/// view uses an optional ``Navigation`` parameter, and will
+/// create an internal navigation state if you don't provide
+/// a custon one.
+///
+/// The view will be configured for the destination type and
+/// inject the ``Navigation`` value into the environment.
+public struct NavigationDestinationStack<Destination: NavigationDestination>: View {
+
+    /// Create a navigation stack with a generic destination
+    /// and an optional ``Navigation`` to manage the path.
+    ///
+    /// - Parameters:
+    ///   - root: The root destination.
+    ///   - navigation: The navigation value to use, if any.
+    public init(
+        root: Destination,
+        navigation: Navigation<Destination>? = nil
+    ) {
+        self.root = root
+        self.navigation = navigation
+    }
+
+    private let root: Destination
+    private let navigation: Navigation<Destination>?
+
+    @State private var internalNavigation = Navigation<Destination>()
+
+    private var resolvedNavigation: Navigation<Destination> {
+        navigation ?? internalNavigation
+    }
+
+    public var body: some View {
+        NavigationStack(path: Bindable(resolvedNavigation).path) {
+            NavigationDestinationContent(
+                root: root,
+                navigation: resolvedNavigation
+            )
+        }
+    }
+}
+
 // MARK: - Previews
 
 private enum MyAppScreen: String, NavigationDestination {
@@ -78,10 +122,7 @@ private enum MyAppScreen: String, NavigationDestination {
 
 #Preview {
 
-    @Previewable @State var navigation = Navigation<MyAppScreen>()
-
-    NavigationStack(
-        root: MyAppScreen.home,
-        navigation: navigation
+    NavigationDestinationStack(
+        root: MyAppScreen.home
     )
 }

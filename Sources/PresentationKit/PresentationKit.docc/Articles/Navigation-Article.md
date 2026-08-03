@@ -62,10 +62,10 @@ struct MyApp: View {
 }
 ```
 
-This will inject the ``Navigation`` value into the environment, so that all destination views in the stack can access the navigation path. 
+This will inject the ``Navigation`` value into the environment, so that all destination views in the stack can access the navigation path.
+
+You can also use a ``NavigationDestinationStack``, which doesn't require you to pass in a navigation value. 
     
-
-
 
 
 ## Topics
@@ -76,3 +76,4 @@ This will inject the ``Navigation`` value into the environment, so that all dest
 - ``NavigationChevronStyle``
 - ``NavigationDestination``
 - ``NavigationDestinationContent``
+- ``NavigationDestinationStack``

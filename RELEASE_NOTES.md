@@ -13,11 +13,21 @@ These release notes only cover the current major version.
 
 
 
+## 1.4.1
+
+This version adds more navigation support.
+
+### ✨ Features
+
+* The `NavigationDestinationStack` is a new custom stack view. 
+
+
+
 ## 1.4
 
 This version adds more navigation support.
 
-### ✨ New Features
+### ✨ Features
 
 * The `NavigationDestination` protocol can be impemented by any hashable type. 
 * The native `NavigationStack` has a new `NavigationDestination`-based initializer. 
@@ -34,7 +44,7 @@ This version adjusts `View+Alert` to resolve strange Swift 6 toolchain bugs with
 
 This version adds localized toast support.
 
-### ✨ New Features
+### ✨ Features
 
 * The `ToastMessage` can now be created with a `LocalizedStringResource`. 
 
@@ -44,7 +54,7 @@ This version adds localized toast support.
 
 This version adds toast support.
 
-### ✨ New Features
+### ✨ Features
 
 * The library now supports presenting toast messages with a `Presentation` value. 
 * The `.alert(for:)` modifier has a new alternative that lets you customize the default values.
@@ -58,7 +68,7 @@ This version makes a few breaking changes to the library, despite the semantic v
 
 The reason for this is that the library still has few users, and the alternative is worse. 
 
-### ✨ New Features
+### ✨ Features
 
 * The `.alert(for:content:)` modifier now lets you return `nil` to avoid alerting.
 
@@ -86,7 +96,7 @@ The reason for this is that the library still has very few users, and the altern
 
 This version removes a lot of legacy protocols and models and makes the library cleaner.
 
-### ✨ New Features
+### ✨ Features
 
 * `NavigationButton` can be styled with `.navigationChevronStyle`.
 * `NavigationChevron` can be styled with `.navigationChevronStyle`.
@@ -140,7 +150,7 @@ This version adds new legacy models, which can be used to present any alerts or 
 
 This version adds new error utilities.
 
-### ✨ New Features
+### ✨ Features
 
 * `.presentation(...)` can now be used with non-identifiable errors.
 * `.presentation(...)` can now be used with `ErrorAlertConvertible` types.
@@ -151,7 +161,7 @@ This version adds new error utilities.
 
 This version adds new error utilities.
 
-### ✨ New Features
+### ✨ Features
 
 * `ErrorAlerter` can be implemented to make it easy to handle errors.
 
@@ -165,7 +175,7 @@ This version adds new error utilities.
 
 This version adds new navigation utilities.
 
-### ✨ New Features
+### ✨ Features
 
 * `NavigationButton` can be used to render a `Button` as a `NavigationLink`.
 * `NavigationChevron` can be used to mimic a native navigation chevron.
@@ -177,7 +187,7 @@ This version adds new navigation utilities.
 
 This is the first public release of PresentationKit.
 
-### ✨ New Features
+### ✨ Features
 
 * `AlertContext` can be used to present alerts.
 * `SheetContext` can be used to present sheets.
