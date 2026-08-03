@@ -13,6 +13,17 @@ These release notes only cover the current major version.
 
 
 
+## 1.4
+
+This version adds more navigation support.
+
+### ✨ New Features
+
+* The `NavigationDestination` protocol can be impemented by any hashable type. 
+* The native `NavigationStack` has a new `NavigationDestination`-based initializer. 
+
+
+
 ## 1.3.2
 
 This version adjusts `View+Alert` to resolve strange Swift 6 toolchain bugs with disfavored overloads.  
