@@ -1,10 +1,10 @@
 # Navigation
 
-Use the ``Navigation`` class to perform value-based navigation.
+The ``Navigation`` class can be used to perform value-based navigation.
 
 ## Overview
 
-The observable ``Navigation`` class makes it easy to perform value-based navigation. The ``Navigation/path`` can be bound to a navigation stack, and used to push and pop content to the stack.
+The ``Navigation`` class can be used to perform value-based navigation. The ``Navigation/path`` can be bound to a ``SwiftUI/NavigationStack``, and used to push and pop content to the stack.
 
 ```swift
 struct MyView: View {
@@ -26,7 +26,7 @@ struct MyView: View {
 }
 ```
 
-You can also make any hashable type implement the ``NavigationDestination`` protocol, to make it possible to use it with a value-based navigation stack.
+You can also make any type implement the ``NavigationDestination`` protocol, to use it with a value-based ``SwiftUI/NavigationStack``.
 
 ```swift
 enum MyAppScreen: String, NavigationDestination {
@@ -46,7 +46,7 @@ enum MyAppScreen: String, NavigationDestination {
 }
 ```
 
-You can then create a navigation stack that is specialized for this custom type: 
+You can then create a ``SwiftUI/NavigationStack`` that is bound to this specific type, and navigate by using values of that specific type: 
 
 ```swift
 struct MyApp: View {
@@ -57,16 +57,19 @@ struct MyApp: View {
         NavigationStack(
             root: MyAppScreen.home,
             navigation: navigation
-        )        
+        )
+        
+        // ...or, to use an internal navigation state
+        
+        NavigationDestinationStack(
+            root: MyAppScreen.home
+        )
     }
 }
 ```
 
-This will inject the ``Navigation`` value into the environment, so that all destination views in the stack can access the navigation path.
-
-You can also use a ``NavigationDestinationStack``, which doesn't require you to pass in a navigation value. 
+This will inject the ``Navigation`` value into the environment, so that all destination views in the stack can access the navigation path. 
     
-
 
 ## Topics
 

@@ -1,28 +1,54 @@
 # Toasts
 
-Use the toast modifier to present toasts that slide in from a screen edge.
+PresentationKit can present value-based toasts that slide in from a screen edge.
 
-## Overview
-
-PresentationKit makes it easy to present toasts from a ``Presentation`` instance, by sliding in from a screen edge and automatically dismissing after a certain time, or when the user swipes it.
-
-
-## Presentation
-
-To present a toast with a ``Presentation`` instance, just apply the ``SwiftUICore/View/toast(for:edge:content:)`` view modifier and return a view for the presented item:
+To present a ``Presentation``-based toast, apply the ``SwiftUICore/View/toast(for:edge:content:)`` modifier and return a content view for the presented value:
 
 ```swift
+enum MyToast: String, Identifiable {
+    case toast1
+    case toast2
+    case toast3
+
+    var id: String { rawValue }
+
+    @MainActor
+    var message: ToastMessage {
+        .init(messageResource)
+    }
+
+    var messageResource: LocalizedStringResource {
+        switch self {
+        case .toast1: "Hello from the top!"
+        case .toast2: "Hello again from the top!"
+        case .toast3: "Hello from the bottom!"
+        }
+    }
+}
+
 struct MyView: View {
 
-    @State var toast = Presentation<MyToast>()
+    @State var topToast = Presentation<MyToast>()
+    @State var bottomToast = Presentation<MyToast>()
 
     var body: some View {
-        Button("Show toast") {
-            toast.present(.init(message: "Hello!"))
+        List {
+            Button("Show top toast") {
+                topToast.present(.toast1)
+            }
+            Button("Show another top toast") {
+                topToast.present(.toast2)
+            }
+            Button("Show bottom toast") {
+                bottomToast.present(.toast3)
+            }
         }
-        .toast(for: $toast) { item in
-            ToastMessage(item.message)
-                .padding()
+        .toast(for: $topToast) { item in
+            item.message
+        }
+        .toast(for: $bottomToast, edge: .bottom) { item in
+            item.message
+                .toastDuration(seconds: 5)
         }
     }
 }
@@ -34,10 +60,7 @@ struct MyView: View {
 Toasts slide in from the ``ToastPresentationEdge/top`` edge by default. Use the `edge` parameter to slide it in from another edge:
 
 ```swift
-.toast(for: $toast, edge: .bottom) { item in
-    ToastMessage(item.message)
-        .padding()
-}
+.toast(for: $toast, edge: .bottom) { ... }
 ```
 
 
@@ -74,6 +97,7 @@ Both can be customized with a ``ToastStyle``, which controls the background and 
         .padding()
 }
 ```
+
 
 ## Topics
 

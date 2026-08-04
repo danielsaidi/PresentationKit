@@ -1,27 +1,35 @@
 # Sheets
 
-Use the sheet modifiers to present sheets that animate size changes or fit their content.
+PresentationKit can present value-based sheets and animate size changes.
 
-## Overview
-
-PresentationKit makes it easy to present sheets from a ``Presentation`` instance, and provides utilities to make sheets animate size changes and size to fit their content.
-
-
-## Presentation
-
-To present a sheet with a ``Presentation`` instance, just apply the ``SwiftUICore/View/sheet(for:onDismiss:content:)`` view modifier and return a content view for the presented item:
+To present a ``Presentation``-based sheet, apply the ``SwiftUICore/View/sheet(for:onDismiss:content:)`` modifier and return a content view for the presented value:
 
 ```swift
+enum AppSheet: String, Identifiable {
+    case red, green, blue
+    
+    var id: String { rawValue }
+    
+    var content: some View {
+        switch self {
+        case .red: Color.red
+        case .green: Color.green
+        case .blue: Color.blue 
+        }
+    }
+}
+    
 struct MyView: View {
 
-    @State var sheet = Presentation<MyContent>()
+    @State var sheet = Presentation<AppSheet>()
 
     var body: some View {
-        Button("Show sheet") {
-            sheet.present(.someValue)
+        Button("Show Sheet") {
+            sheet.present(.red)
         }
-        .sheet(for: $sheet) { content in
-            MySheetView(content: content)
+        .sheet(for: $sheet) { sheet in
+            sheet.content
+                .ignoresSafeArea()
         }
     }
 }
@@ -82,6 +90,7 @@ struct MyView: View {
 ```
 
 > Note: This modifier uses standard system detents under the hood, which means size changes are not animated. Use ``SwiftUICore/View/presentationDetents(animated:manual:)`` if your sheet changes size.
+
 
 ## Topics
 

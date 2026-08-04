@@ -1,6 +1,6 @@
 # Presentation
 
-Use the ``Presentation`` class to present alerts, sheets, covers, and toasts.
+The ``Presentation`` class can be used to present alerts, modals, popovers, sheets, and toasts.
 
 ## Overview
 
@@ -12,13 +12,15 @@ To use it, create an instance and bind it to any view with a presentation-based 
 enum MyContent: String, @MainActor Identifiable, View {
     case red, green, blue
 
-    var id: String { rawValue.capitalized }
+    var id: String { rawValue }
 
     var body: some View {
         switch self {
         case .red: Color.red
         case .green: Color.green
         case .blue: Color.blue
+        case .yellow: Color.yellow
+        case .black: Color.black
         }
     }
 }
@@ -27,7 +29,9 @@ struct MyView: View {
 
     @State var alert = Presentation<MyContent>()
     @State var cover = Presentation<MyContent>()
+    @State var popover = Presentation<MyContent>()
     @State var sheet = Presentation<MyContent>()
+    @State var toast = Presentation<MyContent>()
 
     var body: some View {
         List {
@@ -37,24 +41,37 @@ struct MyView: View {
             Button("Present Green Cover") {
                 cover.present(.green)
             }
-            Button("Present Blue Sheet") {
-                sheet.present(.blue)
+            Button("Present Blue Popover") {
+                popover.present(.blue)
+            }
+            Button("Present Yellow Sheet") {
+                sheet.present(.yellow)
+            }
+            Button("Present Black Toast") {
+                sheet.present(.black)
             }
         }
         .alert(for: $alert) { content in
-            AlertMessage(title: content.id)
+            AlertMessage(title: content.capitalized)
         }
         #if !os(macOS)
         .fullScreenCover(for: $cover) { content in
             content
         }
         #endif
+        .popover(for: $popover) { content in
+            content
+        }
         .sheet(for: $sheet) { content in
+            content
+        }
+        .toast(for: $toast) { content in
             content
         }
     }
 }
 ```
+
 
 ## Topics
 

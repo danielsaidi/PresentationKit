@@ -126,3 +126,83 @@ private extension View {
         }
     }
 }
+
+#Preview {
+
+    enum AppAlert: String, Identifiable {
+        case somethingHappened
+
+        var id: String { rawValue }
+
+        var message: AlertMessage {
+            switch self {
+            case .somethingHappened:
+                AlertMessage(
+                    title: "Hello",
+                    message: { Text("Something happened.") },
+                    actions: { Button("OK", action: {}) }
+                )
+            }
+        }
+    }
+
+    struct MyView: View {
+
+        @State var alert = Presentation<AppAlert>()
+
+        var body: some View {
+            Button("Show alert") {
+                alert.present(.somethingHappened)
+            }
+            .alert(for: $alert) { alert in
+                alert.message
+            }
+        }
+    }
+
+    return MyView()
+}
+
+#Preview("Error") {
+
+    enum AppError: String, AlertableError {
+        case minor, major
+
+        var id: String { rawValue }
+
+        var alertMessage: AlertMessage {
+            AlertMessage(
+                title: "A \(rawValue) error occured",
+                message: { Text("Please try again") },
+                actions: { Button("OK", action: {}) }
+            )
+        }
+    }
+
+    struct MyView: View, @MainActor ErrorAlerter {
+
+        @State var alertError = Presentation<Error>()
+
+        func simulateOperation(error: Error?) async throws {
+            if let error { throw error }
+        }
+
+        var body: some View {
+            List {
+                Button("Perform a successful operation") {
+                    tryWithErrorAlert {
+                        try await simulateOperation(error: nil)
+                    }
+                }
+                Button("Perform a failing operation") {
+                    tryWithErrorAlert {
+                        try await simulateOperation(error: AppError.minor)
+                    }
+                }
+            }
+            .alert(for: $alertError)
+        }
+    }
+
+    return MyView()
+}

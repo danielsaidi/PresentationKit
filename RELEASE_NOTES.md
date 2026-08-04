@@ -13,6 +13,16 @@ These release notes only cover the current major version.
 
 
 
+## 1.5
+
+This version adds popover support.
+
+### ✨ Features
+
+* The `.popover(for:...)` view extension can be used to present popovers. 
+
+
+
 ## 1.4.1
 
 This version adds more navigation support.

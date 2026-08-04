@@ -1,31 +1,37 @@
 # Alerts
 
-Use the alert modifiers to present alerts and automatically handle errors.
+PresentationKit can present value-based alerts and automatically handle errors.
 
-## Overview
-
-PresentationKit makes it easy to present alerts from a ``Presentation`` instance, and to automatically alert any errors that are thrown during async operations.
-
-
-## Presentation
-
-To present an alert with a ``Presentation`` instance, just apply the ``SwiftUICore/View/alert(for:content:)`` modifier and return an ``AlertMessage`` for the presented item:
+To present a ``Presentation``-based alert, apply the ``SwiftUICore/View/alert(for:content:)`` modifier and return an ``AlertMessage`` for the item:
 
 ```swift
+enum AppAlert: String, Identifiable {
+    case somethingHappened
+
+    var id: String { rawValue }
+
+    var message: AlertMessage {
+        switch self {
+        case .somethingHappened:
+            AlertMessage(
+                title: "Hello",
+                message: { Text("Something happened.") },
+                actions: { Button("OK", action: {}) }
+            )
+        }
+    }
+}
+
 struct MyView: View {
 
-    @State var alert = Presentation<MyContent>()
+    @State var alert = Presentation<AppAlert>()
 
     var body: some View {
         Button("Show alert") {
-            alert.present(.someValue)
+            alert.present(.somethingHappened)
         }
-        .alert(for: $alert) { content in
-            AlertMessage(title: content.id) {
-                Button("OK") {}
-            } message: {
-                Text("Something happened.")
-            }
+        .alert(for: $alert) { alert in
+            alert.message
         }
     }
 }
@@ -33,15 +39,15 @@ struct MyView: View {
 
 ## Error Alerts
 
-Any type that implements ``ErrorAlerter`` can perform throwing async operations with automatic error alerts. If an error conforms to the ``AlertableError`` protocol, the ``SwiftUICore/View/alert(for:)`` modifier will automatically map it to an ``AlertMessage``.
+Any type that implements ``ErrorAlerter`` can perform throwing async operations with automatic error alerts. If the error conforms to the ``AlertableError`` protocol, the ``SwiftUICore/View/alert(for:content:)`` modifier will automatically map it to an ``AlertMessage``.
 
 ```swift
-enum MyError: String, AlertableError {
+enum AppError: String, AlertableError {
     case minor, major
 
     var id: String { rawValue }
 
-    var alertMessage: AlertMessage<AnyView, AnyView> {
+    var alertMessage: AlertMessage {
         AlertMessage(
             title: "A \(rawValue) error occured",
             message: { Text("Please try again") },
@@ -67,7 +73,7 @@ struct MyView: View, @MainActor ErrorAlerter {
             }
             Button("Perform a failing operation") {
                 tryWithErrorAlert {
-                    try await simulateOperation(error: MyError.minor)
+                    try await simulateOperation(error: AppError.minor)
                 }
             }
         }
@@ -75,6 +81,7 @@ struct MyView: View, @MainActor ErrorAlerter {
     }
 }
 ```
+
 
 ## Topics
 

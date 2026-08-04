@@ -25,3 +25,40 @@ public extension View {
     }
     #endif
 }
+
+#Preview {
+
+    enum AppCover: String, Identifiable {
+
+        case red, green, blue
+
+        var id: String { rawValue }
+
+        var content: some View {
+            switch self {
+            case .red: Color.red
+            case .green: Color.green
+            case .blue: Color.blue
+            }
+        }
+    }
+
+    struct MyView: View {
+
+        @State var cover = Presentation<AppCover>()
+
+        var body: some View {
+            Button("Show Cover") {
+                cover.present(.red)
+            }
+            #if !os(macOS)
+            .fullScreenCover(for: $cover) { cover in
+                cover.content
+                    .ignoresSafeArea()
+            }
+            #endif
+        }
+    }
+
+    return MyView()
+}

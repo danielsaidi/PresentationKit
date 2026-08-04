@@ -86,11 +86,25 @@ private struct ToastModifier<Item: Identifiable, ToastContent: View>: ViewModifi
 
 #Preview {
 
-    return MyView()
+    enum MyToast: String, Identifiable {
+        case toast1
+        case toast2
+        case toast3
 
-    struct MyToast: Identifiable {
-        let id = UUID()
-        let message: String
+        var id: String { rawValue }
+
+        @MainActor
+        var message: ToastMessage {
+            .init(messageResource)
+        }
+
+        var messageResource: LocalizedStringResource {
+            switch self {
+            case .toast1: "Hello from the top!"
+            case .toast2: "Hello again from the top!"
+            case .toast3: "Hello from the bottom!"
+            }
+        }
     }
 
     struct MyView: View {
@@ -101,24 +115,24 @@ private struct ToastModifier<Item: Identifiable, ToastContent: View>: ViewModifi
         var body: some View {
             List {
                 Button("Show top toast") {
-                    topToast.present(.init(message: "Hello from the top!"))
+                    topToast.present(.toast1)
                 }
                 Button("Show another top toast") {
-                    topToast.present(.init(message: "Hello again from the top!"))
+                    topToast.present(.toast2)
                 }
                 Button("Show bottom toast") {
-                    bottomToast.present(.init(message: "Hello from the bottom!"))
+                    bottomToast.present(.toast3)
                 }
             }
             .toast(for: $topToast) { item in
-                ToastMessage(item.message)
-                    .padding()
+                item.message
             }
             .toast(for: $bottomToast, edge: .bottom) { item in
-                ToastMessage(item.message)
-                    .padding()
-                    .toastDuration(seconds: 1.5)
+                item.message
+                    .toastDuration(seconds: 5)
             }
         }
     }
+
+    return MyView()
 }

@@ -1,35 +1,43 @@
 # Full Screen Covers
 
-Use the full screen cover modifier to present full screen covers.
+PresentationKit can present value-based full screen covers.
 
-## Overview
-
-PresentationKit makes it easy to present full screen covers from a ``Presentation`` instance.
-
-
-## Presentation
-
-To present a full screen cover with a ``Presentation`` instance, just apply the ``SwiftUICore/View/fullScreenCover(for:onDismiss:content:)`` view modifier and return a content view for the presented item:
+To present a ``Presentation``-based full screen cover, apply the ``SwiftUICore/View/fullScreenCover(for:onDismiss:content:)`` modifier and return a content view for the presented value:
 
 ```swift
+enum AppCover: String, Identifiable {
+
+    case red, green, blue
+
+    var id: String { rawValue }
+
+    var content: some View {
+        switch self {
+        case .red: Color.red
+        case .green: Color.green
+        case .blue: Color.blue
+        }
+    }
+}
+
 struct MyView: View {
 
-    @State var cover = Presentation<MyContent>()
+    @State var cover = Presentation<AppCover>()
 
     var body: some View {
-        Button("Show cover") {
-            cover.present(.someValue)
+        Button("Show Cover") {
+            cover.present(.red)
         }
-        #if !os(macOS)
-        .fullScreenCover(for: $cover) { content in
-            MyCoverView(content: content)
+        .fullScreenCover(for: $cover) { cover in
+            cover.content
+                .ignoresSafeArea()
         }
-        #endif
     }
 }
 ```
 
-> Note: Full screen covers are not available on macOS.
+> Important: Full screen covers are not available on macOS.
+
 
 ## Topics
 

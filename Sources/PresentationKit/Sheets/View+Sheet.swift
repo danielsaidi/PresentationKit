@@ -23,3 +23,37 @@ public extension View {
         )
     }
 }
+
+#Preview {
+
+    enum AppSheet: String, Identifiable {
+        case red, green, blue
+
+        var id: String { rawValue }
+
+        var content: some View {
+            switch self {
+            case .red: Color.red
+            case .green: Color.green
+            case .blue: Color.blue
+            }
+        }
+    }
+
+    struct MyView: View {
+
+        @State var sheet = Presentation<AppSheet>()
+
+        var body: some View {
+            Button("Show Sheet") {
+                sheet.present(.red)
+            }
+            .sheet(for: $sheet) { sheet in
+                sheet.content
+                    .ignoresSafeArea()
+            }
+        }
+    }
+
+    return MyView()
+}

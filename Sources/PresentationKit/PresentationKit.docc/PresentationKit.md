@@ -6,7 +6,7 @@ A SwiftUI library that makes it easy to present and navigate to items.
 
 ![Library logotype](Logo.png)
 
-PresentationKit is a SwiftUI library that makes it easy to perform value-based ``Navigation`` and value-based alert, sheet, and modal ``Presentation``. The library also has additional utilities for alerts, errors, navigation, sheets, and toasts.
+PresentationKit can perform value-based ``Navigation`` and value ``Presentation`` of alerts, sheets, modals, popovers, and toasts.
 
 
 
@@ -28,48 +28,82 @@ PresentationKit supports iOS 17, tvOS 17, macOS 14, watchOS 10, and visionOS 1.
 
 ## Getting Started
 
-The documentation has separate articles for each feature in the library. 
-
 ### Navigation
 
-The ``Navigation`` class makes it easy to perform value-based navigation with a navigation stack.
+The ``Navigation`` class can be used to perform value-based navigation.
+
+```swift
+struct MyView: View {
+
+    @State var navigation = Navigation()
+
+    var body: some View {
+        NavigationStack(path: $navigation.path) {
+            Button("Push view") {
+                navigation.push("detail")
+            }
+            .navigationDestination(for: String.self) { value in
+                Text(value)
+            }
+        }
+    }
+}
+```
+
+Types that implement the ``NavigationDestination`` protocol can be used to create a `NavigationStack` for that specific type. 
 
 See the <doc:Navigation-Article> article for more information.
 
 
 ### Presentation
 
-The ``Presentation`` class makes it easy to perform value-based presentations and dismissals. It's the foundation to presenting <doc:Alerts-Article>, <doc:Full-Screen-Covers-Article>, <doc:Sheets-Article>, and <doc:Toasts-Article> .
+The ``Presentation`` class can be used to perform value-based presentation of alerts, modals, sheets, popovers, and toasts.
 
-See the <doc:Presentation-Article> article for more information.
+```swift
+struct MyView: View {
 
+    // In this example, consider there are enums for the various content types. 
+    
+    @State var alert = Presentation<MyAlert>()
+    @State var cover = Presentation<MyModal>()
+    @State var popover = Presentation<MyPopover>()
+    @State var sheet = Presentation<MyModal>()
+    @State var toast = Presentation<MyToast>()
+    
+    var body: some View {
+        Button("Perform presentation") {
+            alert.present(.someAlert)       // or
+            cover.present(.someModal)       // or
+            popover.present(.somePopover)   // or
+            sheet.present(.someModal)       // or
+            sheet.present(.someToast)
+        }
+        .alert(for: $alert) { alert in
+            // Present an AlertMessage for the alert
+        }
+        #if !os(macOS)
+        .fullScreenCover(for: $cover) { cover in
+            // Present a view for the full screen cover
+        }
+        #endif
+        .popover(for: $popover) { popover in
+            // Present a view for the popover
+        }
+        .sheet(for: $sheet) { sheet in
+            // Present a view for the sheet
+        }
+        .toast(for: $toast) { toast in
+            // Present a view for the toast
+        }
+    }
+}
+```
 
-### Alerts
+Each modifier supports the same customizations as the native modifiers. For instance, sheets can define a dismiss action, popovers can define an arrow direction, toasts can define an edge, etc. 
 
-PresentationKit makes it easy to present alerts and automatically handle errors thrown during async operations.
+PresentationKit also adds additional support to each content type. For instance, alerts can be used to automatically alert async errors, a sheets can be resized with animations, etc.
 
-See the <doc:Alerts-Article> article for more information.
-
-
-### Sheets
-
-PresentationKit makes it easy to present sheets, with additional utilities for animated size changes and size-to-fit behavior.
-
-See the <doc:Sheets-Article> article for more information.
-
-
-### Full Screen Covers
-
-PresentationKit makes it easy to present full screen covers on all non-macOS platforms.
-
-See the <doc:Full-Screen-Covers-Article> article for more information.
-
-
-### Toasts
-
-PresentationKit makes it easy to present toasts that slide in from a screen edge and auto-dismiss after a configurable duration.
-
-See the <doc:Toasts-Article> article for more information.
+See the <doc:Presentation-Article> article and the separate <doc:Alerts-Article>, <doc:Full-Screen-Covers-Article>, <doc:Popovers-Article>, <doc:Sheets-Article>, and <doc:Toasts-Article> articles for more information.
 
 
 
@@ -100,14 +134,17 @@ PresentationKit is available under the MIT license.
 
 ## Topics
 
-### Articles
+### Getting Started
 
-- <doc:Getting-Started-Article>
 - <doc:Presentation-Article>
 - <doc:Navigation-Article>
+
+### Content Articles
+
 - <doc:Alerts-Article>
-- <doc:Sheets-Article>
 - <doc:Full-Screen-Covers-Article>
+- <doc:Popovers-Article>
+- <doc:Sheets-Article>
 - <doc:Toasts-Article>
 
 ### Essentials

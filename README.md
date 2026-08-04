@@ -38,12 +38,12 @@ PresentationKit supports iOS 17, tvOS 17, macOS 14, watchOS 10, and visionOS 1.
 
 ## Getting Started
 
-PresentationKit has features for value-based navigation and presentation, and lests you present alerts, sheets, full screen covers, and toasts in the same way. See the [documentation][Documentation] for more information.
+PresentationKit has features for value-based navigation and presentation, and lets you present alerts, covers, popovers, sheets, and toasts in the same way. See the [documentation][Documentation] for more information.
 
 
 ### Navigation
 
-The `Navigation` class makes it easy to perform value-based navigation with a navigation stack.
+The ``Navigation`` class can be used to perform value-based navigation.
 
 ```swift
 struct MyView: View {
@@ -63,135 +63,60 @@ struct MyView: View {
 }
 ```
 
+Types that implement the ``NavigationDestination`` protocol can be used to create a `NavigationStack` for that specific type. 
+
 See the [Navigation article][Navigation] for more information.
 
 
 ### Presentation
 
-The `Presentation` class is the foundation for presenting alerts, sheets, covers, and toasts. It holds an optional item that can be presented and dismissed.
+The ``Presentation`` class can be used to perform value-based presentation of alerts, modals, sheets, popovers, and toasts.
 
 ```swift
 struct MyView: View {
 
-    @State var sheet = Presentation<MyContent>()
-
+    // In this example, consider there are enums for the various content types. 
+    
+    @State var alert = Presentation<MyAlert>()
+    @State var cover = Presentation<MyModal>()
+    @State var popover = Presentation<MyPopover>()
+    @State var sheet = Presentation<MyModal>()
+    @State var toast = Presentation<MyToast>()
+    
     var body: some View {
-        Button("Show sheet") {
-            sheet.present(.someValue)
+        Button("Perform presentation") {
+            alert.present(.someAlert)       // or
+            cover.present(.someModal)       // or
+            popover.present(.somePopover)   // or
+            sheet.present(.someModal)       // or
+            sheet.present(.someToast)
         }
-        .sheet(for: $sheet) { content in
-            MySheetView(content: content)
-        }
-    }
-}
-```
-
-See the [Presentation article][Presentation] for more information.
-
-
-### Alerts
-
-The `.alert(for:content:)` modifier presents an alert for any `Presentation` instance. Return an `AlertMessage` for the item to present.
-
-```swift
-struct MyView: View {
-
-    @State var alert = Presentation<MyContent>()
-
-    var body: some View {
-        Button("Show alert") {
-            alert.present(.someValue)
-        }
-        .alert(for: $alert) { content in
-            AlertMessage(title: content.title) {
-                Button("OK") {}
-            } message: {
-                Text(content.message)
-            }
-        }
-    }
-}
-```
-
-Types that implement `ErrorAlerter` can perform throwing async operations with automatic error alerts. If the error conforms to `AlertableError`, `.alert(for:)` maps it to an `AlertMessage` automatically.
-
-See the [Alerts article][Alerts] for more information.
-
-
-### Sheets
-
-The `.sheet(for:content:)` modifier presents a sheet for any `Presentation` instance. PresentationKit also has modifiers for animated size changes and size-to-fit behavior.
-
-```swift
-struct MyView: View {
-
-    @State var sheet = Presentation<MyContent>()
-
-    var body: some View {
-        Button("Show sheet") {
-            sheet.present(.someValue)
-        }
-        .sheet(for: $sheet) { content in
-            MySheetView(content: content)
-                .presentationDetents(.sizeToFit, additional: [.medium, .large])
-                // animated sheets: .presentationDetents(animated: size, manual: [.medium])
-        }
-    }
-}
-```
-
-See the [Sheets article][Sheets] for more information.
-
-
-### Full Screen Covers
-
-The `.fullScreenCover(for:content:)` modifier presents a full screen cover for any `Presentation` instance.
-
-```swift
-struct MyView: View {
-
-    @State var cover = Presentation<MyContent>()
-
-    var body: some View {
-        Button("Show cover") {
-            cover.present(.someValue)
+        .alert(for: $alert) { alert in
+            // Present an AlertMessage for the alert
         }
         #if !os(macOS)
-        .fullScreenCover(for: $cover) { content in
-            MyCoverView(content: content)
+        .fullScreenCover(for: $cover) { cover in
+            // Present a view for the full screen cover
         }
         #endif
-    }
-}
-```
-
-See the [Full Screen Covers article][FullScreenCovers] for more information.
-
-
-### Toasts
-
-The `.toast(for:edge:content:)` modifier presents a toast for any `Presentation` instance. Toasts slide in from a screen edge and auto-dismiss after a configurable duration.
-
-```swift
-struct MyView: View {
-
-    @State var toast = Presentation<MyToast>()
-
-    var body: some View {
-        Button("Show toast") {
-            toast.present(.init(message: "Hello!"))
+        .popover(for: $popover) { popover in
+            // Present a view for the popover
         }
-        .toast(for: $toast) { item in
-            ToastMessage(item.message)
-                .padding()
+        .sheet(for: $sheet) { sheet in
+            // Present a view for the sheet
+        }
+        .toast(for: $toast) { toast in
+            // Present a view for the toast
         }
     }
 }
 ```
 
-Use `.toastDuration(seconds:)` on the content view to customize the auto-dismiss duration, and `edge: .bottom` to slide in from the bottom edge.
+Each modifier supports the same customizations as the native modifiers. For instance, sheets can define a dismiss action, popovers can define an arrow direction, toasts can define an edge, etc. 
 
-See the [Toasts article][Toasts] for more information.
+PresentationKit also adds additional support to each content type. For instance, alerts can be used to automatically alert async errors, a sheets can be resized with animations, etc.
+
+See the [Presentation article][Presentation] and the separate content type articles for more information.
 
 
 
@@ -244,7 +169,3 @@ PresentationKit is available under the MIT license. See the [LICENSE][License] f
 
 [Navigation]: https://danielsaidi.github.io/PresentationKit/documentation/presentationkit/navigation-article
 [Presentation]: https://danielsaidi.github.io/PresentationKit/documentation/presentationkit/presentation-article
-[Alerts]: https://danielsaidi.github.io/PresentationKit/documentation/presentationkit/alerts-article
-[Sheets]: https://danielsaidi.github.io/PresentationKit/documentation/presentationkit/sheets-article
-[FullScreenCovers]: https://danielsaidi.github.io/PresentationKit/documentation/presentationkit/full-screen-covers-article
-[Toasts]: https://danielsaidi.github.io/PresentationKit/documentation/presentationkit/toasts-article
